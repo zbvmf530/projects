@@ -1,18 +1,17 @@
 package yedam;
-
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class BoardManager {
 	static Stack<Integer> userCmd = new Stack<>();
-	
+	static MemberDAO memberManager = new MemberDAO();
+	static BoardDAO boardManager = new BoardDAO();
+	static BoardManager programManager = new BoardManager();
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		boolean run = true;
 		Scanner input = new Scanner(System.in);
-		MemberDAO memberManager = new MemberDAO();
-		BoardDAO boardManager = new BoardDAO();
-		BoardManager programManager = new BoardManager();
+		
 		while(run) 
 		{
 			try 
@@ -23,26 +22,32 @@ public class BoardManager {
 				if(userCmd.isEmpty()) {userCmd.push(Integer.parseInt(input.nextLine()));}
 				else {userCmd.set(userCmd.size()-1, Integer.parseInt(input.nextLine()));}
 				
-			}catch(NoSuchElementException e) {}catch(NumberFormatException e) {System.out.println("입력오류!");}
+			}
+			catch(Exception e)  
+			{
+				System.out.println("입력오류!");
+				if(userCmd.isEmpty()) {userCmd.push(6);}
+				else {userCmd.set(userCmd.size()-1, 6);}
+			}
 			System.out.println("1단 메뉴 레벨 : "+ userCmd.size());
 			switch(userCmd.lastElement()) 
 			{
 			// 로그인
 			case 1:
-				programManager.loadLoginMenu(memberManager);
+				programManager.loadLoginMenu();
 				break;
 			
 			// 글작성
 			case 2:
 				if(memberManager.isLogin()) 
-				{boardManager.setBoardList(programManager.loadWriteBoardMenu(boardManager.getBoardList()));}
+				{boardManager.setBoardList(programManager.loadWriteBoardMenu());}
 				else
 				{System.out.println("글을 작성할 권한이 없습니다! 로그인을 해주세요!");}
 				break;
 
 			// 목록보기
 			case 3:
-				programManager.loadRetriveBoardsMenu();
+				programManager.loadRetriveBoardsMenu(boardManager);
 				break;
 				
 			// 댓글작성
@@ -54,6 +59,7 @@ public class BoardManager {
 				break;
 				
 			default:
+				System.out.println("입력오류! 1~5 사이의 값 입력.");
 				break;
 			} // end of switch
 		} // end of while
@@ -61,7 +67,7 @@ public class BoardManager {
 	} // end of main
 	
 	// 로그인 메뉴 메소드
-	 void loadLoginMenu(MemberDAO memberManager) 
+	 void loadLoginMenu() 
 	{
 		Scanner input = new Scanner(System.in);
 		boolean run = true;
@@ -81,7 +87,13 @@ public class BoardManager {
 				{
 					userCmd.push(Integer.parseInt(input.nextLine()));
 				}
-			}catch(NoSuchElementException e) {}catch(NumberFormatException e) {System.out.println("입력오류!");}
+			}
+			catch(Exception e)  
+			{
+				System.out.println("입력오류!");
+				if(userCmd.size()==2) {userCmd.set(userCmd.size()-1, 6);}
+				else {userCmd.push(6);}
+			}
 			System.out.println("2단 메뉴 레벨 : "+ userCmd.size());				
 			switch(userCmd.lastElement()) 
 			{
@@ -117,6 +129,98 @@ public class BoardManager {
 		}// end of while
 	} // end of loginMenu
 	
+	// 글작성 메뉴
+		ArrayList<Board> loadWriteBoardMenu()
+		{
+			boolean run = true;
+			List<Board> boardlist = new ArrayList<>();
+			Scanner input = new Scanner(System.in);
+			while(run) 
+			{
+				try 
+				{
+					System.out.println("1.새 게시물 2.게시물 수정 3.이전메뉴");
+					System.out.println("----------------------------");
+					System.out.print("선택 >> ");
+					if(userCmd.size()==2) // 메뉴레벨이 이미 현재 레벨인 경우 - 스택 교체
+					{userCmd.set(userCmd.size()-1, Integer.parseInt(input.nextLine()));}
+					else 
+					{userCmd.push(Integer.parseInt(input.nextLine()));}
+					
+				}
+				catch(Exception e)  
+				{
+					System.out.println("입력오류!");
+					if(userCmd.size()==2) {userCmd.set(userCmd.size()-1, 6);}
+					else {userCmd.push(6);}
+				}
+				System.out.println("2단 메뉴 레벨 : "+ userCmd.size());
+				switch(userCmd.lastElement()) 
+				{
+				// 새 게시물
+				case 1:
+					// 예외처리 필요(제목, 내용 안적는 경우)
+					String title, content;
+					System.out.print("제목 >>");
+					title = input.nextLine();
+					System.out.print("내용 >>");
+					content = input.nextLine();
+					if(boardManager.insertBoard(memberManager.getId(), title, content)) 
+					{System.out.println("작성완료!");}
+					else {System.out.println("작성실패!");}
+					break;
+				
+				// 게시물 수정
+				case 2:
+					System.out.println(boardManager.getBoardList().size());
+					if(boardManager.retrieveboardList().size()>0) 
+					{
+						boardlist = boardManager.getOwnedboardList(memberManager.getId());
+						if(boardlist.size()>0) 
+						{						
+							for(Board ele : boardlist) 
+							{
+								System.out.println(ele.getOwnedElement());
+							}
+							System.out.println("작성 건수 - "+boardlist.size());
+							
+							// 글번호 선택시 예외처리 필요.
+//							글 번호>> 1
+							
+							
+							loadUpdateBoardMenu();
+						}
+						else{System.out.println("수정할 게시물이 없습니다!");}
+					}
+//					// 게시글이 있을때만 수정가능
+//					수정할 게시물이 없습니다!
+//					-------------------
+//					1 - | 제목 | 내용 |
+//					2 - | 제목 | 내용 |
+//					...
+//					10 - ~~~~~~~~~~~~~
+//					작성건수 - 10
+//					-------------------
+//					글 선택>> 1
+
+					break;
+
+				// 이전메뉴
+				case 3:
+					int lastCmd = userCmd.firstElement();
+					userCmd = new Stack<>();
+					userCmd.push(lastCmd);
+					run = false;
+					break;
+
+				default:
+					System.out.println("입력오류! 1~3 사이의 값 입력.");
+					break;
+				} // end of switch
+			} // end of while
+			
+			return boardManager.getBoardList();
+		} // end of loadWriteBoardMenu
 	 //1.로그인 
 	boolean login(MemberDAO memberManager) 
 	{
@@ -162,7 +266,13 @@ public class BoardManager {
 					userCmd.push(Integer.parseInt(input.nextLine()));
 				}
 				
-			}catch(NoSuchElementException e) {}catch(NumberFormatException e) {System.out.println("입력오류!");}
+			}
+			catch(Exception e)  
+			{
+				System.out.println("입력오류!");
+				if(userCmd.size()==3) {userCmd.set(userCmd.size()-1, 6);}
+				else {userCmd.push(6);}
+			}
 			System.out.println("3단 메뉴 레벨 : "+ userCmd.size());
 			switch(userCmd.lastElement()) 
 			{
@@ -199,6 +309,7 @@ public class BoardManager {
 				break;
 			// 기타 입력오류	
 			default:
+				System.out.println("입력오류! 1~3 사이의 값 입력.");
 				break;
 			}
 			
@@ -311,116 +422,109 @@ public class BoardManager {
 			
 		} //end of while
 	}//end of signUp
+
 	
 	
-	// 글작성 메뉴
-	ArrayList<Board> loadWriteBoardMenu(ArrayList<Board> boardList)
-	{
-		boolean run = true;
-		Scanner input = new Scanner(System.in);
-		while(run) 
-		{
-			try 
+	
+	// 글 수정 메소드
+	 void loadUpdateBoardMenu() {
+		    boolean run = true;
+			List<Board> boardlist = new ArrayList<>();
+			Scanner input = new Scanner(System.in);
+			while(run) 
 			{
-				System.out.println("1.새 게시물 2.게시물 수정 3.이전메뉴");
-				System.out.println("----------------------------");
-				System.out.print("선택 >> ");
-				if(userCmd.size()==2) // 메뉴레벨이 이미 현재 레벨인 경우 - 스택 교체
-				{userCmd.set(userCmd.size()-1, Integer.parseInt(input.nextLine()));}
-				else 
-				{userCmd.push(Integer.parseInt(input.nextLine()));}
-				
-			}catch(NoSuchElementException e) {}catch(NumberFormatException e) {System.out.println("입력오류!");}
-			System.out.println("2단 메뉴 레벨 : "+ userCmd.size());
-			switch(userCmd.lastElement()) 
-			{
-			// 새 게시물
-			case 1:
-				// 예외처리 필요(제목, 내용 안적는 경우)
-				String title, content;
-				System.out.print("제목 >>");
-				title = input.nextLine();
-				System.out.print("내용 >>");
-				content = input.nextLine();
-//				boardManager.insertBoard(title,content);
-//				작성 완료!
-				break;
-			
-			// 게시물 수정
-			case 2:
-				System.out.println(boardList.size());
-				if(boardList.size()>0) 
+				try 
 				{
+					System.out.println("1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴");
+					System.out.println("------------------------------------------");
+					System.out.print("선택 >> ");
+					if(userCmd.size()==3) // 메뉴레벨이 이미 현재 레벨인 경우 - 스택 교체
+					{userCmd.set(userCmd.size()-1, Integer.parseInt(input.nextLine()));}
+					else 
+					{userCmd.push(Integer.parseInt(input.nextLine()));}
 					
 				}
-//				// 게시글이 있을때만 수정가능
-//				수정할 게시물이 없습니다!
-//				-------------------
-//				1 - | 제목 | 내용 |
-//				2 - | 제목 | 내용 |
-//				...
-//				10 - ~~~~~~~~~~~~~
-//				작성건수 - 10
-//				-------------------
-//				글 선택>> 1
-//				----------------------------------------------
-//				1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
-//				----------------------------------------------
-//				선택 >> 1
-//				제목>> ㅇㅇㅇㅇ
-//				수정완료
-//				----------------------------------------------
-//				1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
-//				----------------------------------------------
-//				선택 >> 1
-//				제목>> ㅇㅇㅇㅇ
-//				수정완료
-//				
-//				----------------------------------------------
-//				1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
-//				----------------------------------------------	
-//				선택 >> 2
-//				글번호 >> 1
-//				내용 >> ㅓㅓㅓㅓ
-//				수정완료
-//				
-//				----------------------------------------------
-//				1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
-//				----------------------------------------------
-//				선택 >> 3
-//				제목>> ㅇㅇㅇㅇ
-//				내용 >> ㅓㅓㅓㅓ
-//				수정완료
-				break;
+				catch(Exception e)  
+				{
+					System.out.println("입력오류!");
+					if(userCmd.size()==3) {userCmd.set(userCmd.size()-1, 6);}
+					else {userCmd.push(6);}
+				}
+				System.out.println("3단 메뉴 레벨 : "+ userCmd.size());
+				switch(userCmd.lastElement()) 
+				{
+				// 제목 수정
+				case 1:
+					// 예외처리 필요(제목, 내용 안적는 경우)
+					String title, content;
+					System.out.print("제목 >>");
+					title = input.nextLine();
+					break;
+				
+				// 내용 수정
+				case 2:
+					
+					break;
+				// 제목/내용 수정
+				case 3:
+					break;
+				// 이전메뉴
+				case 4:
+					int [] lastCmd = new int[3];
+					int i = 0;
+					for(Integer ele : userCmd) {lastCmd[i]=ele;i++;}
+					userCmd = new Stack<>();
+					userCmd.push(lastCmd[0]);
+					userCmd.push(lastCmd[1]);
+					run = false;
+					break;
+				default:
+					System.out.println("입력오류! 1~4 사이의 값 입력.");
+					break;
+				}
+			} // end of while
 
-			// 이전메뉴
-			case 3:
-				int lastCmd = userCmd.firstElement();
-				userCmd = new Stack<>();
-				userCmd.push(lastCmd);
-				run = false;
-				break;
+//			----------------------------------------------
+//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
+//			----------------------------------------------
+//			선택 >> 1
+//			제목>> ㅇㅇㅇㅇ
+//			수정완료
+//			----------------------------------------------
+//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
+//			----------------------------------------------
+//			선택 >> 1
+//			제목>> ㅇㅇㅇㅇ
+//			수정완료
+//			----------------------------------------------
+//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
+//			----------------------------------------------
+//			선택 >> 1
+//			제목>> ㅇㅇㅇㅇ
+//			수정완료
+//			
+//			----------------------------------------------
+//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
+//			----------------------------------------------	
+//			선택 >> 2
+//			내용 >> ㅓㅓㅓㅓ
+//			수정완료
+//			
+//			----------------------------------------------
+//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
+//			----------------------------------------------
+//			선택 >> 3
+//			제목>> ㅇㅇㅇㅇ
+//			내용 >> ㅓㅓㅓㅓ
+//			수정완료		
+	} // end of loadUpdateBoardMenu
 
-			default:
-				break;
-			} // end of switch
-		} // end of while
-		
-		return boardList;
-	} // end of loadWriteBoardMenu
-	
-
-		
-	 // 입력 완료시 테이블 갱신 (작성자, 글 제목)
-	
-	
-	
-	
 	// 목록 보기
-	void loadRetriveBoardsMenu()
+	void loadRetriveBoardsMenu(BoardDAO boardManager)
 	{
 		boolean run = true;
 		Scanner input = new Scanner(System.in);
+		List<Board> boardlist;
 		while(run) 
 		{
 			try 
@@ -437,11 +541,14 @@ public class BoardManager {
 			System.out.println("2단 메뉴 레벨 : "+ userCmd.size());
 			switch(userCmd.lastElement()) 
 			{
-			// 새 게시물
+			// 전체 목록
 			case 1:
-//				제목 >>1111
-//				내용 >>~~~~~
-//				작성 완료!
+				boardlist = boardManager.retrieveboardList();
+				if(boardlist.size()>0) 
+				{
+					for (Board ele : boardlist) {System.out.println(ele);}
+				}
+				else{System.out.println("회원님이 작성한 게시물이 없습니다!");}
 				break;
 			}
 			
