@@ -32,19 +32,32 @@ public class BoardDAO {
 	}
 	
 	// 게시판 목록 출력 메소드
-	List<Board> retrieveboardList() 
+	List<Board> retrieveboardList(String inputID) 
 	{
 		//post_no, mem_id, title, content, write_date
 		getConn();
 		List<Board> list = new ArrayList<>();
-		String sql = "select b.post_no, b.mem_id, b.title, b.content, COUNT(c.comment_no) as 댓글수, b.write_date "
-				   + " from board b left join reply c on b.post_no = c.post_no "
-                   + " group by b.post_no, b.mem_id, b.title, b.content, b.write_date "
-                   + " order by post_no ";
+		
+		String sql;
+		if(inputID.equals("")) 
+		{
+			sql = "select b.post_no, b.mem_id, b.title, b.content, COUNT(c.comment_no) as 댓글수, b.write_date "
+					   + " from board b left join reply c on b.post_no = c.post_no "
+	                   + " group by b.post_no, b.mem_id, b.title, b.content, b.write_date "
+	                   + " order by post_no ";
+		}
+		else 
+		{
+			sql = "select b.post_no, b.mem_id, b.title, b.content, COUNT(c.comment_no) as 댓글수, b.write_date "
+					   + " from board b left join reply c on b.post_no = c.post_no "
+					   + " where b.mem_id = ?"
+	                   + " group by b.post_no, b.mem_id, b.title, b.content, b.write_date "
+	                   + " order by post_no ";
+		}
 		SimpleDateFormat fmt=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		try {
 			psmt = conn.prepareStatement(sql);
-			
+			if(!inputID.equals("")){psmt.setString(1,inputID);}
 			rs=psmt.executeQuery();
 			while(rs.next())
 			{

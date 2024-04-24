@@ -58,7 +58,7 @@ public class BoardManager {
 			case 4:
 				if(memberManager.isLogin()) 
 				{
-					if(boardManager.retrieveboardList().size()>0) 
+					if(boardManager.retrieveboardList("").size()>0) 
 					{programManager.loadReplyMenu();}
 					else 
 					{System.out.println("댓글을 작성할 게시물이 없습니다!");}
@@ -186,7 +186,7 @@ public class BoardManager {
 				
 				// 게시물 수정
 				case 2:
-					if(boardManager.retrieveboardList().size()>0) 
+					if(boardManager.retrieveboardList("").size()>0) 
 					{
 						boardlist = boardManager.getOwnedboardList(memberManager.getId());
 						if(boardlist.size()>0) 
@@ -567,13 +567,22 @@ public class BoardManager {
 			{
 			// 전체 목록
 			case 1:
-				boardlist = boardManager.retrieveboardList();
+				boardlist = boardManager.retrieveboardList("");
 				if(boardlist.size()>0) 
 				{loadRetrieveContentMenu();}
-				else{System.out.println("회원님이 작성한 게시물이 없습니다!");}
+				else{System.out.println("등록된 게시물이 없습니다!");}
 				break;
 			// 작성자로 검색
 			case 2:
+				System.out.print("작성자 id>>");
+				String id = input.nextLine();
+				boardlist = boardManager.retrieveboardList(id);
+				if(boardlist.size()>0) 
+				{
+					for(Board brd : boardlist) 
+					{System.out.println(brd);}
+				}
+				else{System.out.println("해당 작성자가 작성한 게시물이 없습니다!");}
 //				 ----------------------------------------------
 //				 1.전체 목록 2.작성자로 검색 3.메인메뉴
 //				 선택>> 2
@@ -615,7 +624,7 @@ public class BoardManager {
 
 			while(run) 
 			{			
-				List<Board> allBoards = boardManager.retrieveboardList();
+				List<Board> allBoards = boardManager.retrieveboardList("");
 				try 
 				{
 					for(Board brd : allBoards) 
@@ -689,7 +698,7 @@ public class BoardManager {
 		
 		while(run) 
 		{			
-			List<Board> allBoards = boardManager.retrieveboardList();
+			List<Board> allBoards = boardManager.retrieveboardList("");
 			try 
 			{
 				for(Board brd : allBoards) 
