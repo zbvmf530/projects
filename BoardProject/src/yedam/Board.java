@@ -6,10 +6,10 @@ public class Board {
 
 	// fields
 	private String mem_id,title,content,write_date;
-	private int post_no;
+	private int post_no, count;
 	
 	
-	
+	//count(c.comment_no) 필드 추가
 	
 	// methods
 	public String getWrite_date() {return write_date;}
@@ -39,7 +39,11 @@ public class Board {
 	public String toString() {
 		// TODO Auto-generated method stub
 		// 1 - | 제목 | 내용 | 작성자 | 댓글 수 | 작성일자 |
-		return String.format("%3d\t|%s\t|%s\t|%s\t|%s\t|", post_no, mem_id, title, content, write_date);
+		return String.format("%3d\t|%s\t|%s\t|%s\t|%d|%s\t|", post_no, title, content, mem_id, count, write_date);
 	}
+
+	public int getCount() {return count;}
+
+	public void setCount(int count) {this.count = count;}
 	
 }

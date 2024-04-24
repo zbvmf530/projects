@@ -3,10 +3,14 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class BoardManager {
+	// fields
 	static Stack<Integer> userCmd = new Stack<>();
 	static MemberDAO memberManager = new MemberDAO();
 	static BoardDAO boardManager = new BoardDAO();
+	static CommentDAO replyManager = new CommentDAO();
 	static BoardManager programManager = new BoardManager();
+
+	// methods
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		boolean run = true;
@@ -47,11 +51,21 @@ public class BoardManager {
 
 			// 목록보기
 			case 3:
-				programManager.loadRetriveBoardsMenu(boardManager);
+				programManager.loadRetriveBoardsMenu();
 				break;
 				
 			// 댓글작성
 			case 4:
+				if(memberManager.isLogin()) 
+				{
+					if(boardManager.retrieveboardList().size()>0) 
+					{programManager.loadReplyMenu();}
+					else 
+					{System.out.println("댓글을 작성할 게시물이 없습니다!");}
+				}
+				else
+				{System.out.println("댓글을 작성할 권한이 없습니다! 로그인을 해주세요!");}
+				
 				break;
 			// 종료
 			case 5:
@@ -99,7 +113,7 @@ public class BoardManager {
 			{
 			// 로그인
 			case 1:
-				if(login(memberManager)) 
+				if(login()) 
 				{
 					System.out.println("로그인 성공");
 					memberManager.setLogin(true);
@@ -108,11 +122,11 @@ public class BoardManager {
 				break;
 			// id/pw 찾기
 			case 2:
-				loadFindUserMenu(memberManager);
+				loadFindUserMenu();
 				break;
 			// 회원가입
 			case 3:
-				signUp(memberManager);
+				signUp();
 				break;
 			// 메인메뉴
 			case 4:
@@ -172,37 +186,31 @@ public class BoardManager {
 				
 				// 게시물 수정
 				case 2:
-					System.out.println(boardManager.getBoardList().size());
 					if(boardManager.retrieveboardList().size()>0) 
 					{
 						boardlist = boardManager.getOwnedboardList(memberManager.getId());
 						if(boardlist.size()>0) 
-						{						
-							for(Board ele : boardlist) 
-							{
-								System.out.println(ele.getOwnedElement());
+						{	
+							int postNo;
+							while(true) 
+							{								
+								for(Board ele : boardlist) 
+								{System.out.println(ele.getOwnedElement());}
+								System.out.println("작성 건수 - "+boardlist.size());
+								
+								// 글번호 선택시 예외처리 필요.
+								System.out.print("글 번호>>");
+								try {
+									postNo=Integer.parseInt(input.nextLine());
+									loadUpdateBoardMenu(postNo);
+									break;
+									}
+								catch(Exception e){}
 							}
-							System.out.println("작성 건수 - "+boardlist.size());
 							
-							// 글번호 선택시 예외처리 필요.
-//							글 번호>> 1
-							
-							
-							loadUpdateBoardMenu();
 						}
 						else{System.out.println("수정할 게시물이 없습니다!");}
 					}
-//					// 게시글이 있을때만 수정가능
-//					수정할 게시물이 없습니다!
-//					-------------------
-//					1 - | 제목 | 내용 |
-//					2 - | 제목 | 내용 |
-//					...
-//					10 - ~~~~~~~~~~~~~
-//					작성건수 - 10
-//					-------------------
-//					글 선택>> 1
-
 					break;
 
 				// 이전메뉴
@@ -221,10 +229,10 @@ public class BoardManager {
 			
 			return boardManager.getBoardList();
 		} // end of loadWriteBoardMenu
+		
 	 //1.로그인 
-	boolean login(MemberDAO memberManager) 
+	boolean login() 
 	{
-
 		Scanner input = new Scanner(System.in);
 		String id,pw;
 	
@@ -236,15 +244,10 @@ public class BoardManager {
 		if(memberManager.loginCheck(id,pw))
 		{return true;}
 		else {return false;}
-		// id pw 확인(userDAO호출, 불리언타입 메소드)
-		
-		// 성공시 객체 필드(아이디,비밀번호)에 값 저장 및 return true;
-		// 실패시 객체 필드(아이디,비밀번호)에 null 저장 및 return false;
-		
 	} // end of login method
 
 	// 2.아이디/비밀번호 찾기 
-	void loadFindUserMenu(MemberDAO memberManager) 
+	void loadFindUserMenu() 
 	{
 		boolean run = true;
 		Scanner input = new Scanner(System.in);
@@ -318,7 +321,7 @@ public class BoardManager {
 	
 	
 	// 3.회원가입
-	void signUp(MemberDAO memberManager) 
+	void signUp() 
 	{
 		boolean run = true;
 		Scanner input = new Scanner(System.in);
@@ -333,11 +336,6 @@ public class BoardManager {
 		{
 			isExistId = false;
 			isExistEmail = false;
-			// userDAO로부터 회원 조회
-			// id 공백, null 체크			
-			// id 중복이면 이미 존재 출력
-			// email 공백, null 체크
-			// email 중복이면 이미 존재 출력
 			
 			// id : 1~15자 사이의 영문으로시작(+특수문자)
 			if(memberList.isEmpty()) 
@@ -423,16 +421,15 @@ public class BoardManager {
 		} //end of while
 	}//end of signUp
 
-	
-	
-	
 	// 글 수정 메소드
-	 void loadUpdateBoardMenu() {
+	 void loadUpdateBoardMenu(int post_no) {
 		    boolean run = true;
-			List<Board> boardlist = new ArrayList<>();
 			Scanner input = new Scanner(System.in);
+			String title, content;
+			List<Board> brList= boardManager.getOwnedboardList(memberManager.getId());
 			while(run) 
 			{
+				brList= boardManager.getOwnedboardList(memberManager.getId());
 				try 
 				{
 					System.out.println("1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴");
@@ -453,20 +450,80 @@ public class BoardManager {
 				System.out.println("3단 메뉴 레벨 : "+ userCmd.size());
 				switch(userCmd.lastElement()) 
 				{
-				// 제목 수정
-				case 1:
+					// 제목 수정
+					case 1:
 					// 예외처리 필요(제목, 내용 안적는 경우)
-					String title, content;
 					System.out.print("제목 >>");
 					title = input.nextLine();
+					System.out.println("for문 진입 전"+title); 
+					for(Board brd : brList) 
+					{
+						
+						if (post_no == brd.getPost_no()) 
+						{
+							System.out.println(brd);
+							brd.setTitle(title);
+							if (boardManager.updateBoard(brd,memberManager.getId(),1)) 
+							{System.out.println("수정완료!");} 
+//							else {
+//								System.out.println("??");
+//							}
+						}
+						
+					}
+					System.out.println("수정실패! 글번호 확인 필요");
+					//updateBoard(memberManager.getId(),title);
 					break;
 				
 				// 내용 수정
 				case 2:
-					
+					System.out.print("내용 >>");
+					content = input.nextLine();
+					for(Board brd : brList) 
+					{
+						
+						if (post_no == brd.getPost_no()) 
+						{
+							System.out.println(brd);
+							brd.setContent(content);
+							if (boardManager.updateBoard(brd,memberManager.getId(),2)) 
+							{
+								System.out.println("수정완료!");
+								
+							} 
+//							else {
+//								System.out.println("??");
+//							}
+						}
+						
+					}
+					System.out.println("수정실패! 글번호 확인 필요");
 					break;
 				// 제목/내용 수정
 				case 3:
+					System.out.print("제목 >>");
+					title = input.nextLine();
+					System.out.print("내용 >>");
+					content = input.nextLine();
+					for(Board brd : brList) 
+					{
+						if (post_no == brd.getPost_no()) 
+						{
+							System.out.println(brd);
+							brd.setTitle(title);
+							brd.setContent(content);
+							if (boardManager.updateBoard(brd,memberManager.getId(),3)) 
+							{
+								System.out.println("수정완료!");
+								
+							} 
+//							else {
+//								System.out.println("??");
+//							}
+						}
+						
+					}
+					System.out.println("수정실패! 글번호 확인 필요");
 					break;
 				// 이전메뉴
 				case 4:
@@ -484,43 +541,10 @@ public class BoardManager {
 				}
 			} // end of while
 
-//			----------------------------------------------
-//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
-//			----------------------------------------------
-//			선택 >> 1
-//			제목>> ㅇㅇㅇㅇ
-//			수정완료
-//			----------------------------------------------
-//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
-//			----------------------------------------------
-//			선택 >> 1
-//			제목>> ㅇㅇㅇㅇ
-//			수정완료
-//			----------------------------------------------
-//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
-//			----------------------------------------------
-//			선택 >> 1
-//			제목>> ㅇㅇㅇㅇ
-//			수정완료
-//			
-//			----------------------------------------------
-//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
-//			----------------------------------------------	
-//			선택 >> 2
-//			내용 >> ㅓㅓㅓㅓ
-//			수정완료
-//			
-//			----------------------------------------------
-//			1. 제목 수정2. 내용 수정 3.제목/내용 수정 4.이전메뉴
-//			----------------------------------------------
-//			선택 >> 3
-//			제목>> ㅇㅇㅇㅇ
-//			내용 >> ㅓㅓㅓㅓ
-//			수정완료		
 	} // end of loadUpdateBoardMenu
 
 	// 목록 보기
-	void loadRetriveBoardsMenu(BoardDAO boardManager)
+	void loadRetriveBoardsMenu()
 	{
 		boolean run = true;
 		Scanner input = new Scanner(System.in);
@@ -545,58 +569,186 @@ public class BoardManager {
 			case 1:
 				boardlist = boardManager.retrieveboardList();
 				if(boardlist.size()>0) 
-				{
-					for (Board ele : boardlist) {System.out.println(ele);}
-				}
+				{loadRetrieveContentMenu();}
 				else{System.out.println("회원님이 작성한 게시물이 없습니다!");}
+				break;
+			// 작성자로 검색
+			case 2:
+//				 ----------------------------------------------
+//				 1.전체 목록 2.작성자로 검색 3.메인메뉴
+//				 선택>> 2
+//				 작성자 id>> bbb
+//				 // 해당 작성자가 작성한 게시글이 없을 시
+//				 작성한 게시글이 없습니다.
+//				 // 있을 시 
+//				    작성자 : bbb
+//				 	------------------------------------
+//					1 - | 제목 | 내용 | 댓글 수 | 작성일자 |
+//					2 - | 제목 | 내용 | 댓글 수 | 작성일자 |
+//					...
+//					10 - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//					작성건수 - 10
+//					------------------------------------
+
+				break;
+			// 메인메뉴
+			case 3:
+				int lastCmd = userCmd.firstElement();
+				userCmd = new Stack<>();
+				userCmd.push(lastCmd);
+				run = false;
+				break;
+			// 기타
+			default:
+				System.out.println("입력오류! 1~3 사이의 값 입력.");
 				break;
 			}
 			
 		} // end of while
 	} // end of loadRetriveBoardsMenu
-//	----------------------------------------------
-//	 1.전체 목록 2.작성자로 검색 3.메인메뉴
-//	 선택>> 1
-//		-----------------------------------
-//		1 - | 제목 | 내용 | 작성자 | 댓글 수 | 작성일자 |
-//		2 - | 제목 | 내용 | 작성자 | 댓글 수 | 작성일자 |
-//		...
-//		50 - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//		-----------------------------------
-//	  1.게시글 보기 2.이전메뉴
-//	  선택>>1
-//	  게시글 번호>> 1
-//	  -----------------------
-//	  제목
-//	  -----------------------
-//	  내용
-//	  ~~~~~~~~~~~~~~~~~~~~~
-//	  ~~~~~~~~~~~~~~~~~~~~
-//	  -----------------------
-//	  댓글
-//	  -----------------------
-//	  test
-//	  -----------------------
-//	  test2
-//	  -----------------------  
-//	 ----------------------------------------------
-//	 1.전체 목록 2.작성자로 검색 3.메인메뉴
-//	 선택>> 2
-//	 작성자 id>> bbb
-//	 // 해당 작성자가 작성한 게시글이 없을 시
-//	 작성한 게시글이 없습니다.
-//	 // 있을 시 
-//	    작성자 : bbb
-//	 	------------------------------------
-//		1 - | 제목 | 내용 | 댓글 수 | 작성일자 |
-//		2 - | 제목 | 내용 | 댓글 수 | 작성일자 |
-//		...
-//		10 - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//		작성건수 - 10
-//		------------------------------------
-//	  ----------------------------------------------
-//	 1.전체 목록 2.작성자로 검색 3.메인메뉴
-//	 선택>> 3
-//	 --------------------------------------------
-//	1. 회원로그인 2.글작성 3.목록보기 4.댓글작성 5.종료
+	
+	
+	// 게시글 조회 메뉴 메소드
+		private void loadRetrieveContentMenu() {
+			Scanner input = new Scanner(System.in);
+			boolean run = true;
+
+			while(run) 
+			{			
+				List<Board> allBoards = boardManager.retrieveboardList();
+				try 
+				{
+					for(Board brd : allBoards) 
+					{System.out.println(brd);}
+					System.out.println("1.게시글 보기 2.이전메뉴");
+					System.out.println("----------------");
+					System.out.print("선택 >> ");
+					if(userCmd.size()==3) // 메뉴레벨이 이미 현재 레벨인 경우
+					{
+						// 스택 교체
+						userCmd.set(userCmd.size()-1, Integer.parseInt(input.nextLine()));
+					}
+					else 
+					{
+						userCmd.push(Integer.parseInt(input.nextLine()));
+					}
+				}
+				catch(Exception e)  
+				{
+					System.out.println("입력오류!");
+					if(userCmd.size()==3) {userCmd.set(userCmd.size()-1, 6);}
+					else {userCmd.push(6);}
+				}
+				System.out.println("3단 메뉴 레벨 : "+ userCmd.size());				
+				switch(userCmd.lastElement()) 
+				{
+				// 게시글 보기
+				case 1:
+					boolean isExistBoard = false;
+					int indexBrd=0;
+					System.out.print("조회할 게시글 번호>>");
+					// 추후 예외처리 필요(숫자 아닌 값 처리)
+					int brdNo = Integer.parseInt(input.nextLine());
+					String id="";
+					for(Board brd : allBoards)
+					{
+						id = brd.getMem_id();
+						if(brdNo == brd.getPost_no()) {isExistBoard = true;indexBrd=brd.getPost_no();}
+					}
+					if(isExistBoard) 
+					{
+						// 게시글 조회 메소드 호출
+						List<String> contentList = replyManager.retrieveContent(id, indexBrd);
+						for(String str:contentList)
+						{System.out.println(str);}				
+					}
+					else{System.out.println("존재하지 않는 게시물입니다!");}
+					break;
+				// 이전메뉴
+				case 2:
+					int [] lastCmd = new int[3];
+					int i = 0;
+					for(Integer ele : userCmd) {lastCmd[i]=ele;i++;}
+					userCmd = new Stack<>();
+					userCmd.push(lastCmd[0]);
+					userCmd.push(lastCmd[1]);				
+					run = false;
+					break;
+				// 기타
+				default:
+					System.out.println("입력오류! 1~2 사이의 값 입력.");
+					break;
+				} // end of reply menu
+			}// end of while
+		} // end of loadRetrieveContentMenu
+
+	void loadReplyMenu() 
+	{
+		Scanner input = new Scanner(System.in);
+		boolean run = true;
+		
+		while(run) 
+		{			
+			List<Board> allBoards = boardManager.retrieveboardList();
+			try 
+			{
+				for(Board brd : allBoards) 
+				{System.out.println(brd);}
+				System.out.println("1.댓글작성 2.이전메뉴");
+				System.out.println("----------------");
+				System.out.print("선택 >> ");
+				if(userCmd.size()==2) // 메뉴레벨이 이미 현재 레벨인 경우
+				{
+					// 스택 교체
+					userCmd.set(userCmd.size()-1, Integer.parseInt(input.nextLine()));
+				}
+				else 
+				{
+					userCmd.push(Integer.parseInt(input.nextLine()));
+				}
+			}
+			catch(Exception e)  
+			{
+				System.out.println("입력오류!");
+				if(userCmd.size()==2) {userCmd.set(userCmd.size()-1, 6);}
+				else {userCmd.push(6);}
+			}
+			System.out.println("2단 메뉴 레벨 : "+ userCmd.size());				
+			switch(userCmd.lastElement()) 
+			{
+			// 댓글작성
+			case 1:
+				boolean isExistBoard = false;
+				int indexBrd=0;
+				System.out.print("글번호 입력>>");
+				// 추후 예외처리 필요(숫자 아닌 값 처리)
+				int brdNo = Integer.parseInt(input.nextLine());
+				for(Board brd : allBoards)
+				{
+					if(brdNo == brd.getPost_no()) {isExistBoard = true;indexBrd=brd.getPost_no();}
+				}
+				if(isExistBoard) 
+				{
+					System.out.print("댓글 입력 >>");
+					String reply = input.nextLine();
+					// 댓글 입력 메소드 호출
+					replyManager.insertReply(memberManager.getId(), brdNo, reply);
+				}
+				else{System.out.println("존재하지 않는 게시물입니다!");}
+				break;
+			// 이전메뉴
+			case 2:
+				int lastCmd = userCmd.firstElement();
+				userCmd = new Stack<>();
+				userCmd.push(lastCmd);
+				run = false;
+				break;
+			// 기타
+			default:
+				System.out.println("입력오류! 1~2 사이의 값 입력.");
+				break;
+			} // end of reply menu
+		}// end of while
+		
+	}// end of loadReplyMenu	
 }
