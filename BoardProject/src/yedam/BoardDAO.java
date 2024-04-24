@@ -151,7 +151,7 @@ public class BoardDAO {
 				
 			}catch(Exception e) 
 			{
-				System.out.println("게시글 수정 오류!");
+				System.out.println("게시글 제목 수정 오류!");
 			}
 			break;
 		// 내용만 수정 쿼리

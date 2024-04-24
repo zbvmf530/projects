@@ -33,17 +33,31 @@ public class Board {
 	public void setContent(String content) {this.content = content;}
 	
 	//1 - | 제목 | 내용 |
-	public String getOwnedElement() {return String.format("%3d\t|%s\t|%s\t|", post_no,title,content);}
+	public String getOwnedElement() {
+		String coptitle = title;
+		if(title.length()<10) {
+			for(int i=0;i<10-title.length();i++)
+			{coptitle+=" ";}
+		}
+		return String.format(" %3d | %-5s |%-10s\t |", post_no, coptitle, content.substring(0,7)+"...");
+		}
+	
+	public int getCount() {return count;}
+	
+	public void setCount(int count) {this.count = count;}
 	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		// 1 - | 제목 | 내용 | 작성자 | 댓글 수 | 작성일자 |
-		return String.format("%3d\t|%s\t|%s\t|%s\t|%d|%s\t|", post_no, title, content, mem_id, count, write_date);
+		String coptitle = title;
+		if(title.length()<10) {
+			for(int i=0;i<10-title.length();i++)
+			{coptitle+=" ";}
+		}
+		else {coptitle = coptitle.substring(0,7)+"...";}
+		return String.format(" %3d | %-5s | %-10s | %-10s | %3d | %s |", post_no, coptitle, content.substring(0,7)+"...", mem_id, count, write_date);
 	}
 
-	public int getCount() {return count;}
-
-	public void setCount(int count) {this.count = count;}
 	
 }

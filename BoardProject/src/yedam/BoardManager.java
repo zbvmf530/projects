@@ -2,6 +2,7 @@ package yedam;
 import java.util.*;
 import java.util.regex.Pattern;
 
+
 public class BoardManager {
 	// fields
 	static Stack<Integer> userCmd = new Stack<>();
@@ -452,10 +453,14 @@ public class BoardManager {
 				{
 					// 제목 수정
 					case 1:
+					///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
 					// 예외처리 필요(제목, 내용 안적는 경우)
+					// varchar2 는 컬럼의 제한 길이보다 큰 값이 들어오면 쿼리가 실행되지않음.(예외처리 해야함)
+					// 현재 varchar2타입의 위 특성으로 인해 발생할수 있는 예외는 게시판, 댓글, 회원 전부 처리해줘야함
+					// 게시판, 회원, 댓글(값 입력, 수정 등 값 조작하는 메소드 반드시 확인!!!!글자수 제한을 응용단에서 해주자!)
 					System.out.print("제목 >>");
 					title = input.nextLine();
-					System.out.println("for문 진입 전"+title); 
+					//System.out.println("for문 진입 전"+title); 
 					for(Board brd : brList) 
 					{
 						
@@ -477,6 +482,8 @@ public class BoardManager {
 				
 				// 내용 수정
 				case 2:
+					// 예외처리 필요(제목, 내용 안적는 경우)
+					// varchar2 는 컬럼의 제한 길이보다 큰 값이 들어오면 쿼리가 실행되지않음.(예외처리 해야함)
 					System.out.print("내용 >>");
 					content = input.nextLine();
 					for(Board brd : brList) 
@@ -501,6 +508,8 @@ public class BoardManager {
 					break;
 				// 제목/내용 수정
 				case 3:
+					// 예외처리 필요(제목, 내용 안적는 경우)
+					// varchar2 는 컬럼의 제한 길이보다 큰 값이 들어오면 쿼리가 실행되지않음.(예외처리 해야함)
 					System.out.print("제목 >>");
 					title = input.nextLine();
 					System.out.print("내용 >>");
@@ -549,6 +558,7 @@ public class BoardManager {
 		boolean run = true;
 		Scanner input = new Scanner(System.in);
 		List<Board> boardlist;
+	
 		while(run) 
 		{
 			try 
@@ -580,7 +590,10 @@ public class BoardManager {
 				if(boardlist.size()>0) 
 				{
 					for(Board brd : boardlist) 
-					{System.out.println(brd);}
+					{
+						System.out.println(brd);
+					}
+					
 				}
 				else{System.out.println("해당 작성자가 작성한 게시물이 없습니다!");}
 //				 ----------------------------------------------
