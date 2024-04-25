@@ -9,6 +9,9 @@ public class CommentDAO {
 	Connection conn;
 	ResultSet rs;
 	PreparedStatement psmt;
+	Statement stmt;
+
+	
 	// methods
 	private void getConn() 
 	{
@@ -16,6 +19,7 @@ public class CommentDAO {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			String url = "jdbc:oracle:thin:@localhost:1521:xe";
 			conn = DriverManager.getConnection(url,"jsb","1234");
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
@@ -91,25 +95,42 @@ public class CommentDAO {
 			
 			SimpleDateFormat fmt=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 			try {
-				psmt = conn.prepareStatement(sql);
+				psmt = conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 				//System.out.println(id);
 				//System.out.println(brdNo);
 				psmt.setString(1, id);
 				psmt.setInt(2, brdNo);
-				//System.out.println("쿼리 실행전");
 				rs=psmt.executeQuery();
 				//System.out.println("쿼리 실행후");
-				if(rs.next())
+				ResultSetMetaData rsmd = rs.getMetaData();
+				if(rsmd.getColumnCount()>0)
 				{
-					titleHeader = String.format("|%30s|%s|%-19s\n", rs.getString(1),rs.getString(2),fmt.format(rs.getDate(4)).toString());
+					String copy="";
+					rs.next();
+					titleHeader = String.format("\n|제목 : %s|작성자 : %s|작성일 : %s|\n----------------------------------------------------------\n", rs.getString(1),rs.getString(2),fmt.format(rs.getDate(4)).toString());
 					content = rs.getString(3);
+					if(content.length()/30<2)
+					{
+						copy += content.substring(0,content.length())+"\n";
+					}
+						
 					for(int i = 0; i<content.length()/30;i++)
 					{
 						// 줄단위 서브스트링 추가
 						// 30글자 단위로 한줄
+						if(content.substring(i*30).length()>29) 
+						{							
+							copy += content.substring(i*30,(i*30)+29)+"\n";
+						}
+						else 
+						{
+							copy += content.substring(i*30, (i*30) + content.substring(i*30).length())+"\n";
+						}
 						
-						//content.substring(i*30, i)
 					}
+					titleHeader += copy;
+					titleHeader += "----------------------------------------------------------\n";
+					rs.previous();
 				}
 				while(rs.next())
 				{
@@ -120,7 +141,8 @@ public class CommentDAO {
 					
 					if(rs.getString(6) != null) 
 					{						
-						replies.add(String.format("%s\t|%s|%s", rs.getString(5),rs.getString(6),fmt.format(rs.getDate(7)).toString()));
+						replies.add(String.format("댓글 : %s|작성자 : %s|작성일 : %s", rs.getString(6),rs.getString(5),fmt.format(rs.getDate(7)).toString()));
+						replies.add("\n----------------------------------------------------------\n");
 					}
 				}
 //				for(String str : replies) 

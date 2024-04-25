@@ -50,13 +50,18 @@ public class Board {
 	public String toString() {
 		// TODO Auto-generated method stub
 		// 1 - | 제목 | 내용 | 작성자 | 댓글 수 | 작성일자 |
-		String coptitle = title;
+		String coptitle = title, copcon=content;
 		if(title.length()<10) {
 			for(int i=0;i<10-title.length();i++)
 			{coptitle+=" ";}
 		}
-		else {coptitle = coptitle.substring(0,7)+"...";}
-		return String.format("%3s | %-5s | %-10s | %-10s | %5.3s | %s |", String.valueOf(post_no), coptitle, content.substring(0,7)+"...", mem_id, String.valueOf(count), write_date);
+		else {coptitle = title.substring(0,7)+"...";}
+		if(content.length()<10) {
+			for(int i=0;i<10-content.length();i++)
+			{copcon+=" ";}
+		}
+		else {copcon = content.substring(0,7)+"...";}
+		return String.format("%3s | %-5s | %-10s | %-10s | %5.3s | %s |", String.valueOf(post_no), coptitle, copcon, mem_id, String.valueOf(count), write_date);
 	}
 
 	
