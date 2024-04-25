@@ -75,6 +75,7 @@ public class CommentDAO {
 		public List<String> retrieveContent(String id, int brdNo) {
 			getConn();
 			List<Board> list = new ArrayList<>();
+			String titleHeader = "";
 			String content = "";
 			List<String> replies = new ArrayList<>();
 //			-- 가져올 내용
@@ -84,10 +85,10 @@ public class CommentDAO {
 			
 			String sql = "select b.title, b.mem_id , b.content, b.write_date , c.mem_id, c.content, c.write_date"
 					   + " from board b left join reply c on b.post_no = c.post_no "
-	                   + " where c.post_no is not null "
-					   + " and b.mem_id = ? "
+					   + " where b.mem_id = ? "
 					   + " and b.post_no = ? "
-					   + " order by c.write_date ";
+					   + " order by c.write_date "; 
+			
 			SimpleDateFormat fmt=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 			try {
 				psmt = conn.prepareStatement(sql);
@@ -98,18 +99,35 @@ public class CommentDAO {
 				//System.out.println("쿼리 실행전");
 				rs=psmt.executeQuery();
 				//System.out.println("쿼리 실행후");
+				if(rs.next())
+				{
+					titleHeader = String.format("|%30s|%s|%-19s\n", rs.getString(1),rs.getString(2),fmt.format(rs.getDate(4)).toString());
+					content = rs.getString(3);
+					for(int i = 0; i<content.length()/30;i++)
+					{
+						// 줄단위 서브스트링 추가
+						// 30글자 단위로 한줄
+						
+						//content.substring(i*30, i)
+					}
+				}
 				while(rs.next())
 				{
-					//System.out.println("1");
-					//System.out.println(String.format("%s\t|%s|%s\n%s\n", rs.getString(1),rs.getString(2),fmt.format(rs.getDate(4)).toString(),rs.getString(3)));
-					content = String.format("%s\t|%s|%s\n%s\n", rs.getString(1),rs.getString(2),fmt.format(rs.getDate(4)).toString(),rs.getString(3));
-					replies.add(String.format("%s\t|%s|%s", rs.getString(5),rs.getString(6),fmt.format(rs.getDate(7)).toString()));
+//					글제목 : 공백 포함 30자
+//					글내용 : 공백 포함 30자씩 한줄 최대 다섯줄 (= 150)
+					
+					
+					
+					if(rs.getString(6) != null) 
+					{						
+						replies.add(String.format("%s\t|%s|%s", rs.getString(5),rs.getString(6),fmt.format(rs.getDate(7)).toString()));
+					}
 				}
 //				for(String str : replies) 
 //				{
 //					System.out.println(str);
 //				}
-				replies.addFirst(content);
+				replies.addFirst(titleHeader);
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

@@ -56,7 +56,7 @@ public class Board {
 			{coptitle+=" ";}
 		}
 		else {coptitle = coptitle.substring(0,7)+"...";}
-		return String.format(" %3d | %-5s | %-10s | %-10s | %3d | %s |", post_no, coptitle, content.substring(0,7)+"...", mem_id, count, write_date);
+		return String.format("%3s | %-5s | %-10s | %-10s | %5.3s | %s |", String.valueOf(post_no), coptitle, content.substring(0,7)+"...", mem_id, String.valueOf(count), write_date);
 	}
 
 	
