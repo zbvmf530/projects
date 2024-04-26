@@ -198,14 +198,14 @@ public class BoardManager {
 				
 				// 게시물 수정
 				case 2:
-					///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-					
 					if(boardManager.retrieveboardList("").size()>0) 
 					{
 						boardlist = boardManager.getOwnedboardList(memberManager.getId());
 						if(boardlist.size()>0) 
 						{	
+							drawOwnHeaders();
 							int postNo;
+							//글수정 헤더 작성
 							while(true) 
 							{								
 								for(Board ele : boardlist) 
@@ -677,6 +677,16 @@ public class BoardManager {
 				new String("WRITER"),
 				new String("REPLY"),
 				new String("DATE"));
+	}
+	private void drawOwnHeaders() {
+		System.out.printf("%3.2s | %3.1s%-7s | %2.1s%-8s |\n"
+				+ "----------------------------------\n",
+				new String("NO"),
+				new String(" "),
+				new String("TITLE"),
+				new String(" "),
+				new String("CONTENT"),
+				new String(" "));
 	}
 
 	// 게시글 조회 메뉴 메소드

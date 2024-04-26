@@ -23,7 +23,7 @@ public class BoardDAO {
 	{
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String url = "jdbc:oracle:thin:@192.168.0.10:1521:xe";
 			conn = DriverManager.getConnection(url,"jsb","1234");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -176,9 +176,6 @@ public class BoardDAO {
 			break;
 		// 제목,내용 수정쿼리
 		case 3:
-//			update board 
-			 
-//			where mem_id='ab12' and post_no=1;
 			sql = "update board "
 				+ " set title = ?,"
 				+ " content = ?"

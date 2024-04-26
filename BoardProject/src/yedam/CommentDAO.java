@@ -17,7 +17,7 @@ public class CommentDAO {
 	{
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String url = "jdbc:oracle:thin:@192.168.0.10:1521:xe";
 			conn = DriverManager.getConnection(url,"jsb","1234");
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		} catch (Exception e) {
@@ -82,11 +82,7 @@ public class CommentDAO {
 			String titleHeader = "";
 			String content = "";
 			List<String> replies = new ArrayList<>();
-//			-- 가져올 내용
-//			 -- 글제목, 글 작성자, 글내용, 글 작성일자, 
-//			 -- 댓글 작성자, 댓글 내용, 댓글 작성일자
-			
-			
+
 			String sql = "select b.title, b.mem_id , b.content, b.write_date , c.mem_id, c.content, c.write_date"
 					   + " from board b left join reply c on b.post_no = c.post_no "
 					   + " where b.mem_id = ? "
@@ -96,16 +92,15 @@ public class CommentDAO {
 			SimpleDateFormat fmt=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 			try {
 				psmt = conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-				//System.out.println(id);
-				//System.out.println(brdNo);
+
 				psmt.setString(1, id);
 				psmt.setInt(2, brdNo);
 				rs=psmt.executeQuery();
-				//System.out.println("쿼리 실행후");
+	
 				ResultSetMetaData rsmd = rs.getMetaData();
 				if(rsmd.getColumnCount()>0)
 				{
-					String copy="";
+					String copy="\n글내용\n";
 					rs.next();
 					titleHeader = String.format("\n|제목 : %s|작성자 : %s|작성일 : %s|\n----------------------------------------------------------\n", rs.getString(1),rs.getString(2),fmt.format(rs.getDate(4)).toString());
 					content = rs.getString(3);
@@ -129,7 +124,7 @@ public class CommentDAO {
 						
 					}
 					titleHeader += copy;
-					titleHeader += "----------------------------------------------------------\n";
+					titleHeader += "\n----------------------------------------------------------";
 					rs.previous();
 				}
 				while(rs.next())
@@ -142,7 +137,7 @@ public class CommentDAO {
 					if(rs.getString(6) != null) 
 					{						
 						replies.add(String.format("댓글 : %s|작성자 : %s|작성일 : %s", rs.getString(6),rs.getString(5),fmt.format(rs.getDate(7)).toString()));
-						replies.add("\n----------------------------------------------------------\n");
+						replies.add("----------------------------------------------------------");
 					}
 				}
 //				for(String str : replies) 

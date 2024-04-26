@@ -34,7 +34,7 @@ public class MemberDAO {
 	{
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String url = "jdbc:oracle:thin:@192.168.0.10:1521:xe";
 			conn = DriverManager.getConnection(url,"jsb","1234");
 		} catch (Exception e) {
 			e.printStackTrace();
