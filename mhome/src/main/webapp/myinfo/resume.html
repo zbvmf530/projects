@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>자기소개</title>
+</head>
+<body>
+	<!-- myinfo/resume.html -->
+	<h3>소개란...</h3>
+	<a href="../index.html">이전 페이지</a>
+	<table border="1">
+		<tr>
+			<th>이름</th>
+			<td>정수범</td>
+			<th>연락처</th>
+			<td>010-9440-0336</td>
+			<th>성별</th>
+			<td>남</td>
+		</tr>
+	</table>
+	<button>추가</button>
+	<script>
+	//DOM 제어
+	// queryselector() -> 여러개있을경우 첫번째 요소만 가져옴
+	document.querySelector('td').innerText = "Soobeom Jeong";
+	// 해당 html 문서 안에서 td의 두번째 요소로 접근
+	document.querySelector('td:nth-of-type(2)').innerText = '010-1234-5678';
+	document.querySelector('td:nth-of-type(3)').innerText = 'men';
+	
+	// 추가버튼 클릭하면 '이름':홍길동,연락처:010-1010-2020 성별:남
+	
+/* var buttonClickHandler(){
+		document.querySelector('td').innerText = "Soobeom Jeong";
+		// 해당 html 문서 안에서 td의 두번째 요소로 접근
+		document.querySelector('td:nth-of-type(2)').innerText = '010-1234-5678';
+		document.querySelector('td:nth-of-type(3)').innerText = 'men';
+} */ 
+	const button = document.querySelector('button'); 
+	button.addEventListener('click',buttonClickHandler);
+ 
+ 
+button.onclick = buttonClickHandler;
+	</script>
+</body>
+</html>
