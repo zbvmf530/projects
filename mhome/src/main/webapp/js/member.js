@@ -19,11 +19,15 @@ console.log(btnAdd);
 btnAdd.addEventListener('click',addMember);
 chkhead.addEventListener('change',changeRow);
 
-//수정 버튼 핸들러 연결
+
 btnMod.addEventListener('click',modMember);
+//수정 버튼 핸들러 연결
 function modMember()
 {
 	let datas = tbody.item(0).getElementsByTagName('td');
+	console.log(datas);
+	console.log('fdfd');
+
 	Array.from(datas).forEach(
 		function(item,idx,arr) {
 			if (item.innerText == num.value) {
@@ -32,7 +36,6 @@ function modMember()
 			}
 		}
 	);
-	console.log(datas);
 }
 
 
