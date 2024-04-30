@@ -1,7 +1,10 @@
 let genderAry = [];
 
 
+let options = document.querySelector('#genderList');
 
+
+options.addEventListener('change',makeList()); // 매개변수로 필터링된 배열 넘겨주면 될듯?
 empList.forEach((item)=>{
 	if(genderAry.indexOf(item.gender) == -1){genderAry.push(item.gender);}
 });
