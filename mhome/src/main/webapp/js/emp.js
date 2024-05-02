@@ -10,7 +10,7 @@ function initForm(){
 	xhtp.send();
 	xhtp.onload = function(){
 		let data = JSON.parse(xhtp.responseText);
-		console.log(data);
+		//console.log(data);
 		data.forEach(emp => {
 			let tr = makeRow(emp);
 			document.querySelector('#elist').appendChild(tr);
@@ -35,7 +35,7 @@ function addRow(){
 	addHtp.onload=function(){
 		let result = JSON.parse(addHtp.responseText);
 		if(result.retCode == 'OK'){
-			console.log(result.retVal)
+			//console.log(result.retVal)
 			let tr = makeRow(result.retVal);
 			tbody.appendChild(tr);
 		}else if(result.retCode == 'NG'){
@@ -43,7 +43,7 @@ function addRow(){
 		}else{
 			alert('처리코드 확인하세요');
 		}
-		console.log(result);
+		//console.log(result);
 	} 
 	
 }
@@ -80,7 +80,6 @@ function modifyRow()
 	newTr.querySelector('td:nth-of-type(4)').innerHTML = '<input value="'+originSalary+'">';
 	newTr.querySelector('button').innerText = '수정';
 	newTr.querySelector('button').addEventListener('click',updateRow);
-	console.log(newTr);
 	oldTr.parentElement.replaceChild(newTr,oldTr); // 바꿀요소,기존요소
 }
 
@@ -91,15 +90,12 @@ function updateRow(){
 	const empNo = this.parentElement.parentElement.dataset.no;
 	let email = this.parentElement.parentElement.children[2].children[0].value;
 	let salary = this.parentElement.parentElement.children[3].children[0].value;
-	console.log(empNo);
-	console.log(email);
-	console.log(salary);
+
 	let param=`../empsave.json?job=edit&empNo=${empNo}&email=${email}&salary=${salary}`;
 	editHtp.open('get',param);
 	editHtp.send();
 	editHtp.onload = function(){
 		let result = JSON.parse(editHtp.responseText);
-		console.log(result.retCode);
 		if(result.retCode == 'OK'){
 		let newTr = makeRow(result.retVal);
 		oldTr.parentElement.replaceChild(newTr,oldTr);

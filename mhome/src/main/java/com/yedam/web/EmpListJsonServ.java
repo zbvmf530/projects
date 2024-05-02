@@ -1,6 +1,7 @@
 package com.yedam.web;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import com.yedam.dao.EmpDAO;
+import com.yedam.vo.EmpVO;
 
 @WebServlet("/empJson.json")
 public class EmpListJsonServ extends HttpServlet{
@@ -24,7 +25,8 @@ public class EmpListJsonServ extends HttpServlet{
 		
 		EmpDAO edao = new EmpDAO();
 		Gson lib = new GsonBuilder().create();
-		String json = lib.toJson(edao.selectList());
+		List<EmpVO> test = edao.selectList();
+		String json = lib.toJson(test);
 		System.out.println(lib);
 		resp.getWriter().println(json);
 	}

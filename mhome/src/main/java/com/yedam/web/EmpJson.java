@@ -72,7 +72,7 @@ public class EmpJson extends HttpServlet {
 				map.put("retVal", null);
 				resp.getWriter().print(gson.toJson(map));
 				}
-			resp.getWriter().print(gson.toJson(map));
+			//resp.getWriter().print(gson.toJson(map));
 		} 
 		else if (job.equals("delete")) 
 		{
