@@ -88,7 +88,7 @@ public class EmpDAO extends DAO{
 		List<EmpVO> list = new ArrayList<>();
 		conn();
 		String sql = "insert into EMP(EMP_NO, EMP_NAME, EMP_PHONE, EMAIL, HIRE_DATE, SALARY) values(?,?,?,?,?,?)";
-		String seqSql = "select emp_no_seq.nextval from dual";
+		String seqSql = "select emp_seq.nextval from dual";
 			
 		int seq = 0;
 		try 

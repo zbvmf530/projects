@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded",initForm);
 function initForm(){
 	// Ajax호출
 	const xhtp = new XMLHttpRequest();
-	xhtp.open('get','../empJson.json');
+	xhtp.open('post','../empJson.json');
 	xhtp.send();
 	xhtp.onload = function(){
 		let data = JSON.parse(xhtp.responseText);
@@ -29,9 +29,10 @@ function addRow(){
 	let edate = document.querySelector('#edate').value;
 	let tbody = document.querySelector('#elist');
 	// 사원이름(ename), 연락처(phone), 급여(salary), 입사일자(hire), 이메일(email)
-	let param=`../empsave.json?job=add&name=${ename}&phone=${ephone}&email=${email}&salary=${esal}&hire=${edate}`;
-	addHtp.open('get',param);
-	addHtp.send();
+	let param=`job=add&name=${ename}&phone=${ephone}&email=${email}&salary=${esal}&hire=${edate}`;
+	addHtp.open('post','../empsave.json?');
+	addHtp.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+	addHtp.send(param);
 	addHtp.onload=function(){
 		let result = JSON.parse(addHtp.responseText);
 		if(result.retCode == 'OK'){
@@ -91,9 +92,11 @@ function updateRow(){
 	let email = this.parentElement.parentElement.children[2].children[0].value;
 	let salary = this.parentElement.parentElement.children[3].children[0].value;
 
-	let param=`../empsave.json?job=edit&empNo=${empNo}&email=${email}&salary=${salary}`;
-	editHtp.open('get',param);
-	editHtp.send();
+	
+	let param=`job=edit&empNo=${empNo}&email=${email}&salary=${salary}`;
+	editHtp.open('post','../empsave.json?');
+	editHtp.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+	editHtp.send(param);
 	editHtp.onload = function(){
 		let result = JSON.parse(editHtp.responseText);
 		if(result.retCode == 'OK'){
@@ -113,7 +116,7 @@ function deleteRow(){
 	let tr = this.parentElement.parentElement;
 	//서블릿 실행(삭제) -> OK 반환 -> 화면처리	
 	const delHtp = new XMLHttpRequest();
-	delHtp.open('get','../empsave.json?job=delete&empNo='+delNo);
+	delHtp.open('post','../empsave.json?job=delete&empNo='+delNo);
 	delHtp.send();
 	delHtp.onload = function(){
 		let result = JSON.parse(delHtp.responseText);// retCode:OK or NG
