@@ -8,7 +8,7 @@ function initForm()
 let show = document.querySelector('#show');
 show.appendChild(svc.makeTable());
 document.querySelector('#show>table').appendChild(svc.makeHeader2());
-document.querySelector('#show>table').appendChild(svc.makeBody());
+document.querySelector('#show>table').appendChild(svc.makeBody(4));
 }
 
 const svc = {
@@ -54,19 +54,26 @@ const svc = {
 		thd.appendChild(tr);
 		return thd;*/
 	},
-	makeBody: function(){
+	makeBody: function(month = 4){
 		let tbd = document.createElement('tbody');
 		let tr = document.createElement('tr');
-		let td = document.createElement('td');
-		td.innerHTML =' ';
-		tr.appendChild(td);
+		let inputDate = new Date( new Date().getFullYear(), month-1, 1);
+		let lastDate = new Date( new Date().getFullYear(), month+1, 0).getDate();
+		let spaces = inputDate.getDay(); // getFirstDate(month) 1일의 위치
+		console.log(inputDate.getDay());
+		for(let i = 0;i<spaces;i++){
+			let td = document.createElement('td');
+			td.innerHTML=' ';
+			tr.appendChild(td);
+		}
+		console.log('test:'+lastDate);
 		tbd.appendChild(tr);
-		for(let d = 1; d<=30;d++)
+		for(let d = 1; d<=lastDate+1;d++)
 		{
 			
 			let td = document.createElement('td');
 			td.innerHTML = d;
-			if(d%7==0)
+			if((d+spaces-1)%7==0)
 			{
 				tbd.appendChild(tr);
 				tr = document.createElement('tr');
@@ -74,11 +81,6 @@ const svc = {
 
 			tr.appendChild(td);
 		}
-/*		days.forEach((day) => {
-			let th = document.createElement('th');
-			th.innerHTML = day;
-			tr.appendChild(th);
-		});*/
 		
 		tbd.appendChild(tr);
 		return tbd;

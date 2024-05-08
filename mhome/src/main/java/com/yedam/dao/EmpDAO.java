@@ -159,4 +159,23 @@ public class EmpDAO extends DAO{
 		}
 		return false;
 	}
+	
+	// 부서별 인원현황
+	public Map<String, Integer> getCntperDept() {
+		conn();
+		String sql = "select d.department_name, count(1) as cnt " + " from hr.employees e " + " join hr.departments d "
+				+ " on e.department_id = d.department_id " + " group by d.department_name";
+		Map<String, Integer> resultMap =  new HashMap<String, Integer>();;
+		
+		try {
+			psmt = conn.prepareStatement(sql);
+			rs = psmt.executeQuery();
+			while(rs.next()) 
+			{
+				resultMap.put(rs.getString("department_name"), rs.getInt("cnt"));
+			}
+		} catch (SQLException e) {System.out.println("sql에러");e.printStackTrace();} finally {disCon();}
+
+		return resultMap;
+	}
 }
