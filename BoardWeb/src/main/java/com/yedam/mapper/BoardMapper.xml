@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.mapper.BoardMapper">
+	<select id="boardList" resultType="brd">
+		select * from tbl_boards
+		order
+		by board_no
+	</select>
+	<insert id="insertBrd" parameterType="brd">
+		insert into tbl_boards
+		(BOARD_NO, TITLE, CONTENT, WRITER)
+		values(boards_seq.nextval,#{title},#{content},#{writer})
+	</insert>
+	<select id="selectBoard" parameterType="int" resultType="brd">
+		select*
+		from tbl_boards
+		where board_no=#{boardNo}
+	</select>
+	<update id="updateViewCnt" parameterType="int">
+		update tbl_boards
+		set
+		view_cnt= view_cnt+1
+		where board_no=#{boardNo}
+	</update>
+	<update id="updateBoard" parameterType="brd">
+		update tbl_boards
+		set title = #{title}, content = #{content}
+		where board_no = #{boardNo}
+	</update>
+	<delete id="deleteBoard" parameterType="int">
+		delete from tbl_boards
+		where board_no=#{boardNo}
+	</delete>
+	<!-- <insert id = "insertEmp" parameterType = "brd"> insert into employees 
+		(EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, HIRE_DATE,JOB_ID) values(#{employeeId},#{firstName},#{lastName},#{email},sysdate,#{jobId}) 
+		</insert> <delete id ="deleteEmp" parameterType = "int"> delete from employees 
+		where EMPLOYEE_ID = #{employeeId} </delete> <select id="getEmployee" parameterType 
+		= "int" resultType="brd"> select * from employees where EMPLOYEE_ID = #{employeeId} 
+		</select> -->
+</mapper>
