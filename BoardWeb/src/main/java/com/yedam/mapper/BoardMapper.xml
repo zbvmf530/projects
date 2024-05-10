@@ -25,8 +25,8 @@
 	</select>
 	<insert id="insertBrd" parameterType="brd">
 		insert into tbl_boards
-		(BOARD_NO, TITLE, CONTENT, WRITER,img)
-		values(boards_seq.nextval,#{title},#{content},#{writer}#{img})
+		(BOARD_NO, TITLE, CONTENT, WRITER,IMG)
+		values(boards_seq.nextval,#{title},#{content},#{writer},#{img})
 	</insert>
 	<select id="selectBoard" parameterType="int" resultType="brd">
 		select*
