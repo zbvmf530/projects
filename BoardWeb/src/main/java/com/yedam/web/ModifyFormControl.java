@@ -21,6 +21,7 @@ public class ModifyFormControl implements Control {
 		BoardVO brd = svc.getBoard(Integer.parseInt(req.getParameter("bno")));
 		
 		req.setAttribute("bno", brd);
+		req.setAttribute("page", req.getParameter("page"));
 		req.getRequestDispatcher("WEB-INF/board/editBoard.jsp").forward(req, resp);
 	}
 

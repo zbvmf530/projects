@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.yedam.common.Control;
+import com.yedam.common.PageDTO;
 import com.yedam.service.BoardService;
 import com.yedam.service.BoardServiceImpl;
 import com.yedam.vo.BoardVO;
@@ -29,10 +30,15 @@ public class ModifyControl implements Control {
 		} else {
 			System.out.println("업데이트실패!");
 		}
-		List<BoardVO> list = svc.boardList();
+		String page = req.getParameter("page");
+		PageDTO pageDTO = new PageDTO(Integer.parseInt(page),svc.getTotal());
+		req.setAttribute("paging", pageDTO);
+		List<BoardVO> list = svc.boardList(Integer.parseInt(page));
 
 		// jsp 페이지에 정보 전달
 		req.setAttribute("boardList", list);
+		//page=32
+		//req.setAttribute("paging", );
 		req.getRequestDispatcher("WEB-INF/board/boardList.jsp").forward(req, resp);
 	}
 

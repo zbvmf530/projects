@@ -29,10 +29,8 @@ public class BoardTest {
 //		if(svc.addBoard(brd)) {System.out.println("등록성공!");}
 //		else {System.out.println("등록실패!");}
 		
-		List<BoardVO>list = svc.boardList();
-		for (BoardVO boardVO : list) {
-			System.out.println(boardVO);
-		}
+		svc.boardList(3).forEach(item->System.out.println(item));
+	
 		
 	}
 }

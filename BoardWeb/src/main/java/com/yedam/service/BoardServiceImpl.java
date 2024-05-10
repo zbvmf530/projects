@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import com.yedam.common.DataSource;
 import com.yedam.mapper.BoardMapper;
 import com.yedam.vo.BoardVO;
+import com.yedam.vo.MemberVO;
 
 public class BoardServiceImpl implements BoardService{
 	SqlSession session = DataSource.getInstance().openSession(true);
@@ -14,8 +15,8 @@ public class BoardServiceImpl implements BoardService{
 	
 
 	@Override
-	public List<BoardVO> boardList() {
-		return mapper.boardList();
+	public List<BoardVO> boardList(int page) {
+		return mapper.boardListPaging(page);
 	}
 
 
@@ -50,6 +51,26 @@ public class BoardServiceImpl implements BoardService{
 	public boolean removeBoard(int boardNo) {
 		// TODO Auto-generated method stub
 		return mapper.deleteBoard(boardNo)==1;
+	}
+
+
+	@Override
+	public MemberVO login(String id, String pw) {
+		return mapper.selectMember(id, pw);
+	}
+
+
+	@Override
+	public MemberVO checkMember(String id) {
+		// TODO Auto-generated method stub
+		return mapper.selectMember2(id);
+	}
+
+
+	@Override
+	public int getTotal() {
+		// TODO Auto-generated method stub
+		return mapper.getTotalCnt();
 	}
 	
 

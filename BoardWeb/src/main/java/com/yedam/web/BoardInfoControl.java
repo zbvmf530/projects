@@ -20,7 +20,10 @@ public class BoardInfoControl implements Control {
 		
 		BoardVO brd = svc.getBoard(Integer.parseInt(req.getParameter("bno")));
 		svc.addViewCnt(Integer.parseInt(req.getParameter("bno")));
+		String page = req.getParameter("page");
+		
 		req.setAttribute("result", brd);
+		req.setAttribute("page", page);
 		
 //		if(brd!=null){System.out.println(brd);}
 //		else {System.out.println("조회실패!");}

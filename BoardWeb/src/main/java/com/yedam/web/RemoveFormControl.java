@@ -21,6 +21,7 @@ public class RemoveFormControl implements Control {
 		BoardVO brd = svc.getBoard(Integer.parseInt(req.getParameter("bno")));
 		System.out.println(brd);
 		req.setAttribute("bno", brd);
+		req.setAttribute("page", req.getParameter("page"));
 		req.getRequestDispatcher("WEB-INF/board/removeBoard.jsp").forward(req, resp);
 	}
 

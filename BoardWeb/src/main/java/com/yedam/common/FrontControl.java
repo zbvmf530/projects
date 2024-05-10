@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.yedam.web.AddBoardControl;
 import com.yedam.web.AddFormControl;
 import com.yedam.web.BoardInfoControl;
+import com.yedam.web.LogOutControl;
+import com.yedam.web.LoginControl;
+import com.yedam.web.LoginForm;
 import com.yedam.web.MainControl;
 import com.yedam.web.ModifyControl;
 import com.yedam.web.ModifyFormControl;
@@ -34,13 +37,20 @@ Map<String, Control> map;
 	public void init(ServletConfig config) throws ServletException {
 		// url패턴과 실행할 Control 구현클래스 정의.
 		map.put("/main.do", new MainControl());
-		map.put("/addForm.do", new AddFormControl());
+		map.put("/addForm.do", new AddFormControl()); //글등록화면
 		map.put("/addBoard.do", new AddBoardControl());
 		map.put("/boardInfo.do", new BoardInfoControl());
+		//글수정
 		map.put("/modBoardForm.do", new ModifyFormControl());
 		map.put("/updateBoard.do", new ModifyControl());
+		//글삭제
 		map.put("/romoveBoardForm.do", new RemoveFormControl());
 		map.put("/deleteBoard.do", new RemoveControl());
+		
+		// 회원관련
+		map.put("/logForm.do", new LoginForm());
+		map.put("/login.do", new LoginControl());
+		map.put("/logout.do", new LogOutControl());
 	}
 	
 	// service
