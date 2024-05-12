@@ -20,6 +20,7 @@ public class AddBoardControl implements Control {
 		// TODO Auto-generated method stub
 		// multipart 요청처리를 위한 처리 -> 필요정보 : 1. request정보 2.저장경로 3.파일 최대크기 4. 인코딩방식 5. 리네임정책(중복이름파일처리)
 		String savePath = req.getServletContext().getRealPath("images");
+		System.out.println(savePath);
 		int maxSize = 5 * 1024 *1024;//5mb
 		
 		MultipartRequest mr = new MultipartRequest(req, savePath,maxSize,"utf-8",

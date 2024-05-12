@@ -12,7 +12,7 @@
 <table class="table">
 	<tr>
 		<th>게시글번호</th>
-		<td>${bno.boardNo}></td>
+		<td>${bno.boardNo}</td>
 	</tr>
 	<tr>
 		<th>제목</th>

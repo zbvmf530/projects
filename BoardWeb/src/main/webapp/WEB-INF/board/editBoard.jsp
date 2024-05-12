@@ -25,6 +25,20 @@
 			<th>작성자</th>
 			<td>${bno.boardNo}</td>
 		</tr>
+		
+		<tr>
+		<th>파일</th>
+		<c:choose>
+		<c:when test="${empty bno.img}">
+		<td><input type="file" name = "myImg"></td>
+		</c:when>
+		<c:otherwise>
+		<td><input type="file" name = "myImg" value="http://localhost:8080/BoardWeb/images/${bno.img}"></td> 
+		</c:otherwise>
+		</c:choose>
+		
+		</tr>
+		
 		<tr align="center">
 			<td colspan="4">
 			<c:choose>
