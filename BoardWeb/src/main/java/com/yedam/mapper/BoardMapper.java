@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.common.SearchVO;
 import com.yedam.vo.BoardVO;
 import com.yedam.vo.MemberVO;
 
 public interface BoardMapper {
 	List<BoardVO> boardList();
-	List<BoardVO> boardListPaging(int page);
-	int getTotalCnt(); // 전체건수 계산
+	List<BoardVO> boardListPaging(SearchVO searchitem);
+	int getTotalCnt(SearchVO search); // 전체건수 계산
 	int insertBrd(BoardVO evo);
 //	int deleteEmp(int employeeId);
 	BoardVO selectBoard(int boardNo);

@@ -18,7 +18,9 @@ public class AddFormControl implements Control {
 	public void exec(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		BoardService svc = new BoardServiceImpl();
 		
-		req.getRequestDispatcher("WEB-INF/board/addBoard.jsp").forward(req, resp);
+		//req.getRequestDispatcher("WEB-INF/board/addBoard.jsp").forward(req, resp);
+		req.getRequestDispatcher("board/addBoard.tiles").forward(req, resp);
+		
 	}
 
 }

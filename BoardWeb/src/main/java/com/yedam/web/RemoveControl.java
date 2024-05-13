@@ -30,12 +30,12 @@ public class RemoveControl implements Control {
 			System.out.println("삭제실패!");
 		}
 		String page = req.getParameter("page");
-		PageDTO pageDTO = new PageDTO(Integer.parseInt(page),svc.getTotal());
-		req.setAttribute("paging", pageDTO);
-		List<BoardVO> list = svc.boardList(Integer.parseInt(page));
+		//PageDTO pageDTO = new PageDTO(Integer.parseInt(page),svc.getTotal());
+		//req.setAttribute("paging", pageDTO);
+		//List<BoardVO> list = svc.boardList(Integer.parseInt(page));
 
 		// jsp 페이지에 정보 전달
-		req.setAttribute("boardList", list);
+		//req.setAttribute("boardList", list);
 		req.getRequestDispatcher("WEB-INF/board/boardList.jsp").forward(req, resp);
 	}
 

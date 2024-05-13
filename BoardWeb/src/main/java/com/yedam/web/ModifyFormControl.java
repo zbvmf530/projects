@@ -16,13 +16,17 @@ public class ModifyFormControl implements Control {
 	@Override
 	public void exec(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		req.setCharacterEncoding("utf-8");
 		BoardService svc = new BoardServiceImpl();
 		
 		BoardVO brd = svc.getBoard(Integer.parseInt(req.getParameter("bno")));
 		
 		req.setAttribute("bno", brd);
 		req.setAttribute("page", req.getParameter("page"));
-		req.getRequestDispatcher("WEB-INF/board/editBoard.jsp").forward(req, resp);
+		req.setAttribute("searchCondition", req.getParameter("searchCondition"));
+		req.setAttribute("keyword", req.getParameter("keyword"));
+//		req.getRequestDispatcher("WEB-INF/board/editBoard.jsp").forward(req, resp);
+		req.getRequestDispatcher("board/editBoard.tiles").forward(req, resp);
 	}
 
 }

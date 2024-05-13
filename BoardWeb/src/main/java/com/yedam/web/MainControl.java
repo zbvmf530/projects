@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.yedam.common.Control;
 import com.yedam.common.PageDTO;
+import com.yedam.common.SearchVO;
 import com.yedam.service.BoardService;
 import com.yedam.service.BoardServiceImpl;
 import com.yedam.vo.BoardVO;
@@ -23,14 +24,27 @@ public class MainControl implements Control{
 	public void exec(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String page = req.getParameter("page");
+		String searchCondition = req.getParameter("searchCondition");
+		String keyword = req.getParameter("keyword");
+				
+		SearchVO search = new SearchVO();
 		page = page==null?"1":page; // page파라미터가 없을 경우에는 1페이지 출력
+		
+		search.setPage(Integer.parseInt(page));
+		search.setSearchCondition(searchCondition);
+		search.setKeyword(keyword);
+		
 		BoardService svc = new BoardServiceImpl();
-		List<BoardVO>list = svc.boardList(Integer.parseInt(page));
+		List<BoardVO>list = svc.boardList(search);
 		
 		//jsp 페이지에 정보 전달
 		req.setAttribute("boardList", list);
-		PageDTO pageDTO = new PageDTO(Integer.parseInt(page),svc.getTotal());
+		PageDTO pageDTO = new PageDTO(Integer.parseInt(page),svc.getTotal(search));
 		req.setAttribute("paging", pageDTO);
-		req.getRequestDispatcher("WEB-INF/board/boardList.jsp").forward(req, resp);
+		
+		req.setAttribute("searchCondition", searchCondition);
+		req.setAttribute("keyword", keyword);
+//		req.getRequestDispatcher("WEB-INF/board/boardList.jsp").forward(req, resp);
+		req.getRequestDispatcher("board/boardList.tiles").forward(req, resp);
 	}
 }

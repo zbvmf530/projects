@@ -24,11 +24,14 @@ public class BoardInfoControl implements Control {
 		
 		req.setAttribute("result", brd);
 		req.setAttribute("page", page);
+		req.setAttribute("searchCondition", req.getParameter("searchCondition"));
+		req.setAttribute("keyword", req.getParameter("keyword"));
 		
 //		if(brd!=null){System.out.println(brd);}
 //		else {System.out.println("조회실패!");}
 		
-		req.getRequestDispatcher("WEB-INF/board/board.jsp").forward(req, resp);
+		//req.getRequestDispatcher("WEB-INF/board/board.jsp").forward(req, resp);
+		req.getRequestDispatcher("board/board.tiles").forward(req, resp);
 	}
 
 }
