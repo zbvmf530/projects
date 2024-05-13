@@ -25,6 +25,11 @@ public class ModifyFormControl implements Control {
 		req.setAttribute("page", req.getParameter("page"));
 		req.setAttribute("searchCondition", req.getParameter("searchCondition"));
 		req.setAttribute("keyword", req.getParameter("keyword"));
+//		System.out.println(brd);
+//		System.out.println(req.getParameter("page"));
+//		System.out.println(req.getParameter("searchCondition"));
+//		System.out.println(req.getParameter("keyword"));
+		
 //		req.getRequestDispatcher("WEB-INF/board/editBoard.jsp").forward(req, resp);
 		req.getRequestDispatcher("board/editBoard.tiles").forward(req, resp);
 	}

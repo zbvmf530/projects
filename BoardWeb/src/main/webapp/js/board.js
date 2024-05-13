@@ -4,6 +4,10 @@
 // 수정버튼
 document.querySelector("#modBtn").addEventListener('click', function() {
 	let str = document.getElementsByName("page");
+/*	console.log(page);
+	console.log(searchCondition);
+	console.log(keyword);*/
+
 	document.forms.myFrm.action = `modBoardForm.do?page="${str[0].value}"`; // 수정화면 호출
 	document.forms.myFrm.submit();
 });
@@ -11,13 +15,13 @@ document.querySelector("#modBtn").addEventListener('click', function() {
 // 삭제버튼
 document.querySelector("#delBtn").addEventListener('click', function() {
 	let str = document.getElementsByName("page");
-
+	
 	document.forms.myFrm.action = `romoveBoardForm.do?page="${str[0].value}"`; // 삭제화면 호출
 	document.forms.myFrm.submit();
 });
 
 
-// 댓글 목록 출력
+
 //const bno = 14656;
 console.log(bno);
 fetch('replyList.do?bno=' + bno)
@@ -35,6 +39,15 @@ fetch('replyList.do?bno=' + bno)
 			document.querySelector('div.reply ul').appendChild(tmpl);
 			tmpl.querySelector('span:nth-of-type(3)').innerText = reply.replyer;
 			document.querySelector('div.reply ul').appendChild(tmpl);
+			// 내가 적은 댓글이 아닌 댓글은 삭제못하게 예외처리,
+			// 작성자 가져와서 로그아이디랑 비교 -> 다르면 밑에녀석 disable
+			if(reply.replyer != writer){
+			//console.log(tmpl.querySelector('span:nth-of-type(4)').children[0]);
+			tmpl.querySelector('span:nth-of-type(4)').children[0].style.display = 'none';
+			}
+			else{
+				tmpl.querySelector('span:nth-of-type(4)').children[0].style.display = 'block';
+			}
 		})
 	})
 	.catch(err => console.log(err));
@@ -58,24 +71,36 @@ function deleteRow(e) {
 
 function addReply() {
 	const content = document.querySelector('#reply').value;
-	//console.log(document.querySelector('#reply').value);
-	fetch('addReply.do?bno=' + bno + '&writer=' + writer + '&content=' + content)
-		.then(resolve => resolve.json())
-		.then(result => {
-/*			console.log(result);
-			if(result!='null')
-			{
-				result.boardNo
-				result.reply
-				result.replyNo
-			}*/
-			if (result.retCode == 'OK') {
-				
-				location.reload();
-			}
-			else if (result.retCode == 'NG') { alert('등록실패'); }
-			else { alert('알수 없는 반환값'); }
-		})
-		.catch(err => console.log(err));
+	// 로그인 안했을시 댓글작성안되게 예외처리,
+	
+	if (writer == '') {
+		alert("작성권한이 없습니다! 로그인 먼저 해주세요");
+	}
+	else {
+		// 댓글에 내용 없이 등록할시 안되게 예외처리,
+		if (document.querySelector('#reply').value == '') { alert("댓글 내용을 입력해주세요!"); }
+		else {
+			fetch('addReply.do?bno=' + bno + '&writer=' + writer + '&content=' + content)
+				.then(resolve => resolve.json())
+				.then(result => {
+					//	console.log(result);
+					//	if(result!='null')
+					//	{
+					//		result.boardNo
+					//		result.reply
+					//		result.replyNo
+					//	}
+					if (result.retCode == 'OK') {
+
+						location.reload();
+					}
+					else if (result.retCode == 'NG') { alert('등록실패'); }
+					else { alert('알수 없는 반환값'); }
+				})
+				.catch(err => console.log(err));
+
+		}
+	}
+
 }
 

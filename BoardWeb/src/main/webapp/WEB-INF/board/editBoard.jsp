@@ -7,7 +7,7 @@
 	
 	<c:otherwise>
 <h3>수정화면</h3>
-<form action="updateBoard.do" enctype="multipart/form-data" method="post">
+<form action="updateBoard.do" method="post">
 	<table class="table">
 		<tr>
 			<th>게시글번호</th>
@@ -23,7 +23,7 @@
 		</tr>
 		<tr>
 			<th>작성자</th>
-			<td>${bno.boardNo}</td>
+			<td>${bno.writer}</td>
 		</tr>
 		
 		<tr>
