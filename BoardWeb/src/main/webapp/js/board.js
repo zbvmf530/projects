@@ -26,6 +26,7 @@ showList();
 function showList(){
 	// 댓글목록 초기화
 	document.querySelectorAll('div.content ul li').forEach((li, idx)=>{
+		//console.log(li);
 		if(idx>2){
 			li.remove();
 		}
@@ -154,15 +155,23 @@ function addReply() {
 	const content = document.querySelector('#reply').value;
 	// 로그인 안했을시 댓글작성안되게 예외처리,
 	
+
 	if (writer == '') {alert("작성권한이 없습니다! 로그인 먼저 해주세요");}
 	else {
 		// 댓글에 내용 없이 등록할시 안되게 예외처리,
 		if (document.querySelector('#reply').value == '') { alert("댓글 내용을 입력해주세요!"); }
 		else {
+			console.log(bno,writer,content);
 			svc.addReply({bno:bno,writer:writer,reply:content},
 			result => {
 					if (result.retCode == 'OK') {
 						const row = makeRow(result.retVal);
+						// 댓글 등록 시 등록한 글을 보여주도록(페이지를 활용).
+						// -힌트: 오름차순 (마지막 페이지 계산)
+						svc.getTotalCount(bno,
+						result=>{page=Math.ceil(result.totalCount/5);showList();},
+						err=>console.log(err));
+						
 						document.querySelector('div.reply ul').appendChild(row);
 						document.getElementById('reply').value="";
 						

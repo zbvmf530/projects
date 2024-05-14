@@ -23,8 +23,8 @@ public class AddReplyControl implements Control {
 		resp.setContentType("text/json;charset=utf-8");
 		// 원본글, 댓글작성자, 댓글내용
 		String brdNo = req.getParameter("bno");
-		String writer = req.getParameter("writer");
-		String content = req.getParameter("content");
+		String writer = req.getParameter("replyer");
+		String content = req.getParameter("reply");
 		//String writer = req.getParameter("");
 		
 		ReplyService svc = new ReplyServiceImpl();

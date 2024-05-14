@@ -16,7 +16,7 @@ public class BoardTest {
 		SqlSession session = DataSource.getInstance().openSession(true);
 		ReplyMapper mapper = session.getMapper(ReplyMapper.class);
 		
-		int cnt = mapper.getReplyCnt(14698);
+		int cnt = mapper.getReplyCnt(515);
 		System.out.println(cnt);
 		//mapper.replyList(14656).forEach(reply->System.out.println(reply));
 		
