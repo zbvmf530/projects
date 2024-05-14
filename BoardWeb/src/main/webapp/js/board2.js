@@ -4,6 +4,9 @@
 // 수정버튼
 document.querySelector("#modBtn").addEventListener('click', function() {
 	let str = document.getElementsByName("page");
+/*	console.log(page);
+	console.log(searchCondition);
+	console.log(keyword);*/
 
 	document.forms.myFrm.action = `modBoardForm.do?page="${str[0].value}"`; // 수정화면 호출
 	document.forms.myFrm.submit();
@@ -30,13 +33,17 @@ function showList(){
 			li.remove();
 		}
 	});
-	svc.replyList({bno:bno,page:page}, result => {
+	fetch('replyList.do?bno=' + bno+"&page"+page)
+	.then(resolve => resolve.json()) // json->rorcp
+	.then(result => {
 		//console.log(result);
-										result.forEach(reply => {
-											const row = makeRow(reply);
-											document.querySelector('div.reply ul').appendChild(row);
-										});makePageInfo();},
-					err=>{console.log(err)});
+		result.forEach(reply => {
+			const row = makeRow(reply);
+			document.querySelector('div.reply ul').appendChild(row);
+		})
+		createPageList();
+	})
+	.catch(err => console.log(err));
 }
 
 
@@ -65,16 +72,8 @@ function makeRow(reply={}){
 // 댓글 페이지 생성
 let pagination = document.querySelector('div.pagination');
 
-
-function makePageInfo(){
-	svc.getTotalCount(bno,
-	createPageList,
-	err=>console.log(err))	
-}
-
-function createPageList(result){
-	console.log(result);
-	let totalCnt = result.totalCount; // 불러와야함
+function createPageList(){
+	let totalCnt = 143; // 불러와야함
 	let startPage, endPage, realEnd;
 	let prev, next; 
 	realEnd = Math.ceil(totalCnt/5);
@@ -136,32 +135,48 @@ function deleteRow(e) {
 	const rno = e.target.parentElement.parentElement.dataset.rno;
 	const activepg = pagination.querySelector('.active').dataset.page;
 	
-	svc.removeReply(rno,
-					result => {
-							if (result.retCode == 'OK') {
-								alert('삭제완료');
-								page = activepg;
-				/*				e.target.parentElement.parentElement.remove();*/
-								showList();
-							}
-							else if (result.retCode == 'NG') { alert('삭제실패'); }
-							else { alert('알수 없는 반환값'); }
-						},
-					err => console.log(err));
+	console.log(activepg);
+	//console.log(e.target.parentElement.parentElement);
+	//console.log(rno);
+	fetch('removeReply.do?rno=' + rno)
+		.then(resolve => resolve.json())
+		.then(result => {
+			if (result.retCode == 'OK') {
+				alert('삭제완료');
+				page = activepg;
+/*				e.target.parentElement.parentElement.remove();*/
+				showList();
+			}
+			else if (result.retCode == 'NG') { alert('삭제실패'); }
+			else { alert('알수 없는 반환값'); }
+		})
+		.catch(err => console.log(err));
 }
 
 function addReply() {
 	const content = document.querySelector('#reply').value;
 	// 로그인 안했을시 댓글작성안되게 예외처리,
 	
-	if (writer == '') {alert("작성권한이 없습니다! 로그인 먼저 해주세요");}
+	if (writer == '') {
+		alert("작성권한이 없습니다! 로그인 먼저 해주세요");
+	}
 	else {
 		// 댓글에 내용 없이 등록할시 안되게 예외처리,
 		if (document.querySelector('#reply').value == '') { alert("댓글 내용을 입력해주세요!"); }
 		else {
-			svc.addReply({bno:bno,writer:writer,reply:content},
-			result => {
+			fetch('addReply.do?bno=' + bno + '&writer=' + writer + '&content=' + content)
+				.then(resolve => resolve.json())
+				.then(result => {
+					//	console.log(result);
+					//	if(result!='null')
+					//	{
+					//		result.boardNo
+					//		result.reply
+					//		result.replyNo
+					//	}
 					if (result.retCode == 'OK') {
+
+/*						location.reload();*/
 						const row = makeRow(result.retVal);
 						document.querySelector('div.reply ul').appendChild(row);
 						document.getElementById('reply').value="";
@@ -170,9 +185,11 @@ function addReply() {
 					}
 					else if (result.retCode == 'NG') { alert('등록실패'); }
 					else { alert('알수 없는 반환값'); }
-				},
-				err => console.log(err));
+				})
+				.catch(err => console.log(err));
+
 		}
 	}
+
 }
 

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.yedam.common.Control;
+import com.yedam.common.HttpUtils;
 import com.yedam.service.BoardService;
 import com.yedam.service.BoardServiceImpl;
 import com.yedam.vo.MemberVO;
@@ -27,9 +28,19 @@ public class LoginControl implements Control {
 		if(mvo != null) {
 			HttpSession session = req.getSession();
 			session.setAttribute("logId", mvo.getUserId());
-			resp.sendRedirect("main.do");
+			// 관리자, 회원 구분
+			if(mvo.getUserResp().equals("Admin"))
+			{
+				resp.sendRedirect("memberList.do");
+				}
+			else {
+				resp.sendRedirect("main.do");
+				}
 			}
-		else {resp.sendRedirect("logForm.do");}
+		else {
+			HttpUtils.forward(req, resp, "member/loginForm.tiles");
+			//resp.sendRedirect("logForm.do");
+			}
 	}
 
 }

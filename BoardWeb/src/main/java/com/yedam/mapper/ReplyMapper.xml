@@ -8,12 +8,34 @@
 		from tbl_replys
 		where board_no = #{boardNo}
 	</select>
+	
+	<select id = "replyListPaging" resultType="rep" parameterType="com.yedam.common.SearchVO" >
+	select r.*
+	from(select rownum rn,a.*
+		 from (select *
+			   from tbl_replys
+	where board_no=#{boardNo}
+	order by reply_no) a
+           <![CDATA[ 
+           where rownum <= (#{rpage} * 5)) r
+           ]]> <!-- 비교연산자 사용가능 -->
+	where r.rn > (#{rpage} - 1) * 5
+	</select>
+	<select id="getReplyCnt" resultType="int" parameterType="int">
+	select count(1)
+	from tbl_replys
+	where board_no = #{bno}
+	</select>
 	<delete id="deleteReply" parameterType="int">
 	delete from tbl_replys
 	where reply_no = #{replyNo}
 	</delete>
+	
 	<insert id="insertReply" parameterType="rep">
+	<selectKey resultType="int" keyProperty="replyNo" order="BEFORE">
+	select replys_seq.nextval from dual
+	</selectKey>
 	insert into tbl_replys(REPLY_NO, REPLY, REPLYER, BOARD_NO)
-	values(replys_seq.nextval, #{reply},#{replyer},#{boardNo})
+	values(#{replyNo}, #{reply},#{replyer},#{boardNo})
 	</insert>
 </mapper>

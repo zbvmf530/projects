@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 //import org.apache.ibatis.session.SqlSession;
 
 import com.yedam.common.Control;
+import com.yedam.common.HttpUtils;
 import com.yedam.common.PageDTO;
 import com.yedam.common.SearchVO;
 import com.yedam.service.BoardService;
@@ -45,6 +46,8 @@ public class MainControl implements Control{
 		req.setAttribute("searchCondition", searchCondition);
 		req.setAttribute("keyword", keyword);
 //		req.getRequestDispatcher("WEB-INF/board/boardList.jsp").forward(req, resp);
-		req.getRequestDispatcher("board/boardList.tiles").forward(req, resp);
+		//req.getRequestDispatcher("board/boardList.tiles").forward(req, resp);
+		
+		HttpUtils.forward(req, resp, "board/boardList.tiles");
 	}
 }

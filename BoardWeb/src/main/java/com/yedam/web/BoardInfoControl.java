@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.yedam.common.Control;
+import com.yedam.common.HttpUtils;
 import com.yedam.service.BoardService;
 import com.yedam.service.BoardServiceImpl;
 import com.yedam.vo.BoardVO;
@@ -31,7 +32,8 @@ public class BoardInfoControl implements Control {
 //		else {System.out.println("조회실패!");}
 		
 		//req.getRequestDispatcher("WEB-INF/board/board.jsp").forward(req, resp);
-		req.getRequestDispatcher("board/board.tiles").forward(req, resp);
+		//req.getRequestDispatcher("board/board.tiles").forward(req, resp);
+		HttpUtils.forward(req, resp, "board/board.tiles");
 	}
 
 }

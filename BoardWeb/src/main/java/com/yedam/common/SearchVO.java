@@ -6,4 +6,7 @@ import lombok.Data;
 public class SearchVO {
 	private int page;
 	private String searchCondition,keyword;
+	
+	// 댓글관련
+	private int boardNo,rpage;
 }

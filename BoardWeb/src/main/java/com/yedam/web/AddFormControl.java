@@ -1,16 +1,15 @@
 package com.yedam.web;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.yedam.common.Control;
+import com.yedam.common.HttpUtils;
 import com.yedam.service.BoardService;
 import com.yedam.service.BoardServiceImpl;
-import com.yedam.vo.BoardVO;
 
 public class AddFormControl implements Control {
 
@@ -19,7 +18,9 @@ public class AddFormControl implements Control {
 		BoardService svc = new BoardServiceImpl();
 		
 		//req.getRequestDispatcher("WEB-INF/board/addBoard.jsp").forward(req, resp);
-		req.getRequestDispatcher("board/addBoard.tiles").forward(req, resp);
+		//req.getRequestDispatcher("board/addBoard.tiles").forward(req, resp);
+
+		HttpUtils.forward(req, resp, "board/addBoard.tiles");
 		
 	}
 

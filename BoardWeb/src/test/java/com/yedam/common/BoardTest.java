@@ -16,23 +16,28 @@ public class BoardTest {
 		SqlSession session = DataSource.getInstance().openSession(true);
 		ReplyMapper mapper = session.getMapper(ReplyMapper.class);
 		
-		
+		int cnt = mapper.getReplyCnt(14698);
+		System.out.println(cnt);
 		//mapper.replyList(14656).forEach(reply->System.out.println(reply));
 		
 		
-		ReplyVO rvo = new ReplyVO();
-		ReplyService svc2 = new ReplyServiceImpl();
-		rvo.setBoardNo(14656);
-		rvo.setReplyer("user02");
-		rvo.setReply("test comment");
-		if(svc2.addReply(rvo)) {
-			System.out.println("등록성공");
-			mapper.replyList(14656).forEach(reply->System.out.println(reply));
-		}
-		else {
-			System.out.println("실패!");
-		}
+//		ReplyVO rvo = new ReplyVO();
+//		ReplyService svc2 = new ReplyServiceImpl();
+//		rvo.setBoardNo(14656);
+//		rvo.setReplyer("user02");
+//		rvo.setReply("test comment");
+//		if(svc2.addReply(rvo)) {
+//			System.out.println("등록성공");
+//			mapper.replyList(14656).forEach(reply->System.out.println(reply));
+//		}
+//		else {
+//			System.out.println("실패!");
+//		}
 		
+		/*
+		 * SearchVO sch = new SearchVO(); sch.setBoardNo(14698); sch.setRpage(2);
+		 * mapper.replyListPaging(sch).forEach( reply->{System.out.println(reply);} );
+		 */
 //		SearchVO sch = new SearchVO();
 //		sch.setSearchCondition("TW");
 //		sch.setKeyword("준오");

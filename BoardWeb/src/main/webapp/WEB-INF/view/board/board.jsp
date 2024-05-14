@@ -4,10 +4,51 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <style>
-div.reply div{margin:auto;}
-div.reply ul{list-style-type:none;margin-top:5px;}
-div.reply li{padding-top:1px;padding-bottom:1px;}
-div.reply span{display:inline-block;}
+div.reply div {
+	margin: auto;
+}
+
+div.reply ul {
+	list-style-type: none;
+	margin-top: 5px;
+}
+
+div.reply li {
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
+
+div.reply span {
+	display: inline-block;
+}
+
+.center {
+	text-align: center;
+}
+
+.pagination {
+	display: inline-block;
+}
+
+.pagination a {
+	color: black;
+	float: left;
+	padding: 8px 16px;
+	text-decoration: none;
+	transition: background-color .3s;
+	border: 1px solid #ddd;
+	margin: 0 4px;
+}
+
+.pagination a.active {
+	background-color: #4CAF50;
+	color: white;
+	border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {
+	background-color: #ddd;
+}
 </style>
 <h3>상세화면</h3>
 
@@ -87,9 +128,19 @@ div.reply span{display:inline-block;}
 				</li>
 		</ul>
 	</div><!--  end of content  -->
+	<div class="footer">
+		<div class="center">
+			<div class="pagination">
+			<a href="#">1</a>
+			<a href="#" class = "active">2</a>
+			<a href="#">3</a>
+			</div>
+		</div>
+	</div> <!-- end of footer -->
 </div><!-- end of container -->
 <script>
 const bno = '${result.boardNo}';
 const writer = '${logId}';
 </script>
+<script src="js/replyService.js"></script>
 <script src="js/board.js"></script>

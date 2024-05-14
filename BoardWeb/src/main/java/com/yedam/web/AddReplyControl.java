@@ -1,7 +1,8 @@
 package com.yedam.web;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public class AddReplyControl implements Control {
 	@Override
 	public void exec(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		resp.setContentType("text/json;charset=utf-8");
 		// 원본글, 댓글작성자, 댓글내용
 		String brdNo = req.getParameter("bno");
 		String writer = req.getParameter("writer");
@@ -32,6 +33,7 @@ public class AddReplyControl implements Control {
 		rvo.setReplyer(writer);
 		rvo.setReply(content);
 		
+		Map<String, Object> result = new HashMap<>();
 		/*
 		 * Gson gson = new GsonBuilder().create(); String json = gson.toJson(rvo);
 		 * if(svc.addReply(rvo)) { resp.getWriter().print(json); } else {
@@ -40,13 +42,19 @@ public class AddReplyControl implements Control {
 		
 		  if(svc.addReply(rvo)) { 
 			  // {"retCode":"OK"}
-		  resp.getWriter().print("{\"retCode\":\"OK\"}");
+			  result.put("retCode", "OK");
+			  result.put("retVal", rvo);
 		  
 		  }else { 
 			  // {"retCode":"NG"} 
-			  resp.getWriter().print("{\"retCode\":\"NG\"}"); }
+			  result.put("retCode", "NG");
+			  result.put("retVal", rvo);
+			
 		  }
+		  Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
+		  String json = gson.toJson(result);
+		  resp.getWriter().print(json);
 		 
 }
 
-
+}

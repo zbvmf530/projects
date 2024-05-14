@@ -18,12 +18,15 @@ import com.yedam.web.LogOutControl;
 import com.yedam.web.LoginControl;
 import com.yedam.web.LoginForm;
 import com.yedam.web.MainControl;
+import com.yedam.web.MemberListControl;
 import com.yedam.web.ModifyControl;
 import com.yedam.web.ModifyFormControl;
+import com.yedam.web.ProductListControl;
 import com.yedam.web.RemoveControl;
 import com.yedam.web.RemoveFormControl;
 import com.yedam.web.RemoveReplyControl;
 import com.yedam.web.ReplyListControl;
+import com.yedam.web.TotalCountControl;
 
 
 
@@ -59,14 +62,21 @@ Map<String, Control> map;
 		map.put("/replyList.do", new ReplyListControl());
 		map.put("/removeReply.do", new RemoveReplyControl());
 		map.put("/addReply.do", new AddReplyControl());
+		map.put("/getTotalCnt.do", new TotalCountControl());
+		// 관리자권한
+		map.put("/memberList.do", new MemberListControl());
+		
+		// 상품관련
+		map.put("/productList.do", new ProductListControl());
 	}
 	
 	// service
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/html; charset=utf-8");
-		resp.setCharacterEncoding("utf-8");
-		req.setCharacterEncoding("utf-8");
+		// filter에서 이미 처리함
+		//resp.setContentType("text/html; charset=utf-8");
+		//resp.setCharacterEncoding("utf-8");
+		//req.setCharacterEncoding("utf-8");
 		
 		String uri = req.getRequestURI();
 		String context = req.getContextPath();
