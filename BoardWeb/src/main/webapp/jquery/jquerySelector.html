@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JquerySelector</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+	<div id="banana">
+		<ul>
+			<li>Apple</li>
+			<li>Banana</li>
+			<li>Cherry</li>
+			<li>Melon</li>
+		</ul>
+	</div>
+	<button>선택</button>
+	<button>변경</button>
+	<script>
+		$('button:contains(선택)').on('click',function(e){
+			$('ul li:gt(1)').css('color','yellow')
+			$('ul li:not(:gt(1))').css('background-color','yellow')
+		
+		})
+	</script>
+</body>
+</html>

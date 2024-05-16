@@ -34,5 +34,16 @@ const svc = {
 			.then(resolve => resolve.json())
 			.then(successCall)
 			.catch(errorCall);
+	},
+	// 댓글 수정
+	moifyReply(param= {},successCall, errorCall){
+		fetch('modifyReply.do',{
+			method: 'post',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: 'bno=' + param.bno + '&rno=' + param.rno + '&reply=' + param.reply
+		})
+			.then(resolve => resolve.json())
+			.then(successCall)
+			.catch(errorCall);
 	}
 } // end of svc.

@@ -8,6 +8,7 @@ import com.yedam.vo.ReplyVO;
 public interface ReplyService {
 	List<ReplyVO> replyList(SearchVO search); // 목록
 	boolean removeReply(int replyNo); // 삭제
-	boolean addReply(ReplyVO rvo);
+	boolean addReply(ReplyVO rvo); // 등록
+	boolean modifyReply(ReplyVO rvo); // 수정
 	int getReplyCnt(int bno);
 }

@@ -22,7 +22,7 @@ public class RemoveFormControl implements Control {
 		System.out.println(brd);
 		req.setAttribute("bno", brd);
 		req.setAttribute("page", req.getParameter("page"));
-		req.getRequestDispatcher("WEB-INF/board/removeBoard.jsp").forward(req, resp);
+		req.getRequestDispatcher("WEB-INF/view/board/removeBoard.jsp").forward(req, resp);
 	}
 
 }

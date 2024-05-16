@@ -38,4 +38,11 @@
 	insert into tbl_replys(REPLY_NO, REPLY, REPLYER, BOARD_NO)
 	values(#{replyNo}, #{reply},#{replyer},#{boardNo})
 	</insert>
+	<update id="updateReply" parameterType="rep">
+		update tbl_replys
+		set reply = #{reply},
+		reply_date = sysdate
+		where board_no = #{boardNo}
+		and reply_no=#{replyNo}
+	</update>
 </mapper>

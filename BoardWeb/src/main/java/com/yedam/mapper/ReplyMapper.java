@@ -17,4 +17,6 @@ public interface ReplyMapper {
 	int insertReply(ReplyVO rvo);
 	
 	int getReplyCnt(int bno);
+	
+	int updateReply(ReplyVO rvo);
 }

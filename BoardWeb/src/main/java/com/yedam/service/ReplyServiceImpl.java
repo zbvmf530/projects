@@ -33,4 +33,9 @@ public class ReplyServiceImpl implements ReplyService{
 		// TODO Auto-generated method stub
 		return mapper.getReplyCnt(bno);
 	}
+	@Override
+	public boolean modifyReply(ReplyVO rvo) {
+		// TODO Auto-generated method stub
+		return mapper.updateReply(rvo) == 1;
+	}
 }

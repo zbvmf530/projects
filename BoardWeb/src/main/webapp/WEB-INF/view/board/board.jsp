@@ -26,30 +26,9 @@ div.reply span {
 	text-align: center;
 }
 
-.pagination {
-	display: inline-block;
-}
-
-.pagination a {
-	color: black;
-	float: left;
-	padding: 8px 16px;
-	text-decoration: none;
-	transition: background-color .3s;
-	border: 1px solid #ddd;
-	margin: 0 4px;
-}
-
-.pagination a.active {
-	background-color: #4CAF50;
-	color: white;
-	border: 1px solid #4CAF50;
-}
-
-.pagination a:hover:not(.active) {
-	background-color: #ddd;
-}
 </style>
+<link rel="stylesheet" href="css/modal.css" type="text/css" />
+<link rel="stylesheet" href="css/paging.css" type="text/css" />
 <h3>상세화면</h3>
 
 <c:choose>
@@ -138,9 +117,25 @@ div.reply span {
 		</div>
 	</div> <!-- end of footer -->
 </div><!-- end of container -->
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>댓글번호:</p>
+    <p><input type="text" name="modal_reply"></p>
+    <p><button class="btn btn-primary">수정</button></p>
+    
+  </div>
+
+</div>
 <script>
 const bno = '${result.boardNo}';
 const writer = '${logId}';
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="js/replyService.js"></script>
-<script src="js/board.js"></script>
+<script src="js/jboard.js"></script>
+<script src="js/jmodal.js"></script>
