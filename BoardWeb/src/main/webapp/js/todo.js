@@ -8,25 +8,23 @@ $('.close').on('click',e=>$(e.target).parent().css('display','none'));
 
 
 // Add a "checked" symbol when clicking on a list item
-var list = document.querySelector('ul');
-list.addEventListener('click', function(ev) {
-	if (ev.target.tagName === 'LI') {
-		ev.target.classList.toggle('checked');
-	}
-}, false);
+$('ul').on('click', 'li', function(){
+      $(this).toggleClass('checked');   
+   })
 
 // Create a new list item when clicking on the "Add" button
+
 function newElement() {
-	var li = document.createElement("li");
-	var inputValue = document.getElementById("myInput").value;
+	var li = $("<li/>");
+	var inputValue = $("#myInput").val();
 	var t = document.createTextNode(inputValue);
-	li.appendChild(t);
+	li.append(t);
 	if (inputValue === '') {
 		alert("You must write something!");
 	} else {
-		document.getElementById("myUL").appendChild(li);
+		$("#myUL").append(li);
 	}
-	document.getElementById("myInput").value = "";
+	$("#myInput").val("");
 
 	var span = document.createElement("SPAN");
 	var txt = document.createTextNode("\u00D7");
