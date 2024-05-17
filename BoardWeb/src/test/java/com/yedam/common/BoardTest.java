@@ -2,13 +2,10 @@ package com.yedam.common;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.yedam.mapper.BoardMapper;
 import com.yedam.mapper.ReplyMapper;
 import com.yedam.service.BoardService;
 import com.yedam.service.BoardServiceImpl;
-import com.yedam.service.ReplyService;
-import com.yedam.service.ReplyServiceImpl;
-import com.yedam.vo.ReplyVO;
+import com.yedam.vo.CartVO;
 
 public class BoardTest {
 	public static void main(String[] args) {
@@ -16,8 +13,19 @@ public class BoardTest {
 		SqlSession session = DataSource.getInstance().openSession(true);
 		ReplyMapper mapper = session.getMapper(ReplyMapper.class);
 		
-		int cnt = mapper.getReplyCnt(515);
-		System.out.println(cnt);
+		CartVO cvo = new CartVO();
+		cvo.setNo(1);
+		cvo.setQty(1);
+//		int r = mapper.updateCart(cvo);
+//		System.out.println("건수 : " + r);
+//		int r = mapper.deleteCart(cvo.getNo());
+//		mapper.selectList().forEach(item->System.out.println(item));
+		
+		
+		
+		
+//		int cnt = mapper.getReplyCnt(515);
+//		System.out.println(cnt);
 		//mapper.replyList(14656).forEach(reply->System.out.println(reply));
 		
 		

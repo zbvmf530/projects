@@ -14,6 +14,9 @@ import com.yedam.web.AddBoardControl;
 import com.yedam.web.AddFormControl;
 import com.yedam.web.AddReplyControl;
 import com.yedam.web.BoardInfoControl;
+import com.yedam.web.CartList;
+import com.yedam.web.DelCart;
+import com.yedam.web.EditCart;
 import com.yedam.web.LogOutControl;
 import com.yedam.web.LoginControl;
 import com.yedam.web.LoginForm;
@@ -71,6 +74,11 @@ Map<String, Control> map;
 		
 		// 상품관련
 		map.put("/productList.do", new ProductListControl());
+		
+		// 장바구니 관련
+		map.put("/cartList.do", new CartList());
+		map.put("/editCart.do", new EditCart());
+		map.put("/delCart.do", new DelCart());
 	}
 	
 	// service
