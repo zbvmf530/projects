@@ -8,6 +8,7 @@ import com.yedam.common.DataSource;
 import com.yedam.common.SearchVO;
 import com.yedam.mapper.ReplyMapper;
 import com.yedam.vo.CartVO;
+import com.yedam.vo.CenterVO;
 import com.yedam.vo.ReplyVO;
 
 public class ReplyServiceImpl implements ReplyService{
@@ -53,5 +54,10 @@ public class ReplyServiceImpl implements ReplyService{
 	public boolean removeCart(int no) {
 		// TODO Auto-generated method stub
 		return mapper.deleteCart(no) == 1;
+	}
+	@Override
+	public int addCenter(CenterVO[] array) {
+		// TODO Auto-generated method stub
+		return mapper.insertCenter(array);
 	}
 }

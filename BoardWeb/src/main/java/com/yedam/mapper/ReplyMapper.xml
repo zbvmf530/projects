@@ -60,4 +60,13 @@
 	delete from tbl_cart
 	where no = #{no}
 	</delete>
+	
+	<insert id="insertCenter">
+	insert into tbl_centers(ID, CENTER_NAME, SIDO, PHONE_NUMBER, ADDRESS,
+	CENTER_TYPE)
+	<foreach collection="array" item="center"
+	open=" select " separator=" from dual union all select " close=" from dual">
+	#{center.id},#{center.centerName},#{center.sido},#{center.phoneNumber},#{center.address},#{center.centerType}
+	</foreach>
+</insert>
 </mapper>
