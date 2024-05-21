@@ -14,6 +14,9 @@ import com.yedam.web.AddBoardControl;
 import com.yedam.web.AddFormControl;
 import com.yedam.web.AddReplyControl;
 import com.yedam.web.BoardInfoControl;
+import com.yedam.web.CartList;
+import com.yedam.web.DelCart;
+import com.yedam.web.EditCart;
 import com.yedam.web.LogOutControl;
 import com.yedam.web.LoginControl;
 import com.yedam.web.LoginForm;
@@ -23,6 +26,7 @@ import com.yedam.web.ModifyControl;
 import com.yedam.web.ModifyFormControl;
 import com.yedam.web.ModifyReplyControl;
 import com.yedam.web.ProductListControl;
+import com.yedam.web.RegisterCenter;
 import com.yedam.web.RemoveControl;
 import com.yedam.web.RemoveFormControl;
 import com.yedam.web.RemoveReplyControl;
@@ -71,6 +75,16 @@ Map<String, Control> map;
 		
 		// 상품관련
 		map.put("/productList.do", new ProductListControl());
+		
+		// 장바구니 관련
+		map.put("/cartList.do", new CartList());
+		map.put("/editCart.do", new EditCart());
+		map.put("/delCart.do", new DelCart());
+		
+		// 데이터생성
+		map.put("/registerCenter.do", new RegisterCenter());
+		
+		// 브랜치 테스트
 	}
 	
 	// service
