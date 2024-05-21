@@ -31,10 +31,10 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnKt8_N4-FKOnhI_pSaDL7g_g-XI1-R9E"></script>
     
     <!-- Vendor JS -->
-    <script src="./assets/js/vendor.bundle.js"></script>
+    <script src="./assets/js/mainpage/vendor.bundle.js"></script>
     
     <!-- Theme JS -->
-    <script src="./assets/js/theme.bundle.js"></script>
+    <script src="./assets/js/mainpage/theme.bundle.js"></script>
 
   </body>
 </html>

@@ -123,5 +123,73 @@
           </div>
           
         </div>
+        
+        <section class="py-12">
+      <div class="container">
+        
+        <div class="row">
+	        <div class="col-12 col-md-4 col-lg-3">
+			        <div class="card">
+					  <div class="card-img">
+					    <!-- Image -->
+					    <img class="card-img-top" src="./assets/img/products/product-6.jpg" alt="...">
+					
+					    <!-- Actions -->
+					    <div class="card-actions">
+					      <span class="card-action">
+					        <button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button">
+					          <i class="fe fe-shopping-cart"></i>
+					        </button>
+					      </span>
+					      <span class="card-action">
+					        <button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button">
+					          <i class="fe fe-heart"></i>
+					        </button>
+					      </span>
+					    </div>
+					  </div>
+					  <!-- Body -->
+		              <div class="card-body fw-bold text-center">
+		                <a class="text-body" href="#!">Cotton floral print Dress</a>
+		                <div class="text-muted">$40.00</div>
+		              </div>
+					</div>
+				</div>
+          <div class="col-12 col-md-4 col-lg-3">
+
+            <!-- Card -->
+            <div class="card mb-7">
+
+              <!-- Image -->
+              <div class="card-img">
+
+                <!-- Action -->
+                <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button">
+                  <i class="fe fe-heart"></i>
+                </button>
+
+                <!-- Button -->
+                <button class="btn btn-xs w-100 btn-dark card-btn">
+                  <i class="fe fe-eye me-2 mb-1"></i> Quick View
+                </button>
+
+                <!-- Image -->
+                <img class="card-img-top" src="assets/img/products/product-6.jpg" alt="...">
+
+              </div>
+
+              <!-- Body -->
+              <div class="card-body fw-bold text-center">
+                <a class="text-body" href="#!">Cotton floral print Dress</a>
+                <div class="text-muted">$40.00</div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        
+      </div>
+    </section>
       </div>
     </section>
