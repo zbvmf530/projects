@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.mapper.BoardMapper">
+	<select id="boardList" resultType="com.yedam.vo.BoardVO">
+		select * from tbl_boards
+		order
+		by board_no
+	</select>
+	<select id="getMainCategory" resultType="hashmap">
+		select MAIN_CATEGORY, count(1)
+		from tbl_products
+		group by main_category
+		order by main_category
+	</select>
+	<select id="getSubCategory" parameterType = "string" resultType="string">
+		select sub_category
+		from tbl_products
+		where main_category = '${value}'
+	</select>
+	
+	<select id="getBestSeller" resultType="hashmap">
+	select product_code, count(1) 
+	from tbl_details 
+	group by product_code
+	order by 2 desc
+	</select>
+	
+	<select id="getProduct" parameterType = "int" resultType="com.yedam.vo.ProductVO">
+	select * from tbl_products where product_code=${productCode}
+	</select>
+</mapper>
