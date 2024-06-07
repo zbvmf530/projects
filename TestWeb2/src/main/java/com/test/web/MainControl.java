@@ -50,6 +50,7 @@ public class MainControl implements Control {
 		}
 		
 		
+		// 카테고리 이름이 
 		req.setAttribute("totalList", TotalList);
 		req.setAttribute("bestProducts", bestProducts);
 		
